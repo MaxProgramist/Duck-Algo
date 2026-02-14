@@ -2,3 +2,11 @@
     --canva-color: #353839AA;
     --bitBox-color: #00E5FF;
 }
+
+#input_decimalNumberSum_1, #input_decimalNumberSum_2 {
+    margin: auto 2px;
+}
+
+#button_sum {
+    margin-left: 10px;
+}

@@ -8,20 +8,20 @@
     --color-footer: #353839AA;
 
     --color-button: #4A5568;
-    --color-button-hover: #253D46;
+    --color-button-hover: #667EEA;
 
     --color-input: #2D3748;
-    --color-input-selected: #00303B;
+    --color-input-selected: #5A67D8;
 
     /** --- Other --- **/
     --main-padding: 10px;
     --background-size: 65px;
 
-    --button-glowing-intensity: 8px;
-    --button-glowing-spreading: 3px;
+    --button-glowing-intensity: 9px;
+    --button-glowing-spreading: 5px;
 
-    --input-border: 2px;
-    --input-border-radius: 7px;
+    --input-border: 3px;
+    --input-border-radius: 8px;
 }
 
 html, body {
@@ -76,7 +76,7 @@ button {
     background-color: var(--color-button);
     box-shadow: 0 0 var(--button-glowing-intensity) var(--button-glowing-spreading) var(--color-button);
     color: var(--color-text);
-    margin: 7px auto;
+    margin: 8px auto;
     padding: 6px;
 
     transition: 0.25s linear;
