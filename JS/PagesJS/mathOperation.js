@@ -1,15 +1,20 @@
 //* ---------- Variables ----------
 const INPUT_DECIMAL_TO_BINARY_NUMBER  = document.getElementById('input_decimalNumber');
+const OUTPUT_DECIMAL_TO_BINARY_NUMBER = document.getElementById('output_decimalNumber');
+const OUTPUT_DECIMAL_TO_BINARY_NUMBER_CTX = OUTPUT_DECIMAL_TO_BINARY_NUMBER.getContext("2d");
 
 const INPUT_DECIMAL_SUM_1 = document.getElementById('input_decimalNumberSum_1');
 const INPUT_DECIMAL_SUM_2 = document.getElementById('input_decimalNumberSum_2');
 const OUTPUT_DECIMAL_SUM = document.getElementById('additionAnimation');
 const OUTPUT_DECIMAL_SUM_CTX = OUTPUT_DECIMAL_SUM.getContext("2d");
 
+let numberBits_decNumber = [];
 let numberBits_addition_1 = [], numberBits_addition_2 = [];
 
 ResizeCanva(OUTPUT_DECIMAL_SUM);
 window.addEventListener("resize", () => ResizeCanva(OUTPUT_DECIMAL_SUM));
+ResizeCanva(OUTPUT_DECIMAL_TO_BINARY_NUMBER);
+window.addEventListener("resize", () => ResizeCanva(OUTPUT_DECIMAL_TO_BINARY_NUMBER));
 
 
 EventListeners();
@@ -17,26 +22,53 @@ requestAnimationFrame(Animate);
 
 //* ---------- Functions ----------
 function Input_DecToBin(event) {
-    const OUTPUT_DECIMAL_TO_BINARY_NUMBER = document.getElementById('output_decimalNumber');
+    const BIT_BOX_WIDTH = 25;
+    const BIT_BOX_HEIGHT = 25;
+    const OFFSET = 5;
 
-    if (!IsNumber(event.target.value)) {
-        OUTPUT_DECIMAL_TO_BINARY_NUMBER.innerHTML = "";
-        return;
+    let binNumber = "";
+    if (IsNumber(event.target.value)) {
+        let number = clamp(parseInt(event.target.value), -2147483648, 2147483647);
+        binNumber = DecToBin(number);
     }
 
-    let number = clamp(parseInt(event.target.value), -2147483648, 2147483647);
+    if (numberBits_decNumber.length < binNumber.length) {
+        for (let i = numberBits_decNumber.length; i<binNumber.length; i++) {
+            let currentBit = binNumber[i];
+            let currentBox = new BitBox(OUTPUT_DECIMAL_TO_BINARY_NUMBER_CTX, 0, 0, BIT_BOX_WIDTH, BIT_BOX_HEIGHT, 6, GetCSSColor('--bitBox-color'), currentBit, true, 15);
+            currentBox.startAppear(500);
+            numberBits_decNumber.push(currentBox);
+        }
+    } else if (numberBits_decNumber.length > binNumber.length) {
+        for (let i = binNumber.length; i<numberBits_decNumber.length; i++) numberBits_decNumber[i].startDelete(250);
+    }
 
-    OUTPUT_DECIMAL_TO_BINARY_NUMBER.innerHTML = DecToBin(number) + "<sub>2</sub>";
+    let currentX = OFFSET*2.5;
+    let currentY = OFFSET*2.5;
+
+    for (let i = 0; i<numberBits_decNumber.length; i++) {
+        let currentBox = numberBits_decNumber[i], textIndex = Math.min(binNumber.length-1, i);
+        currentBox.position(currentX, currentY);
+        currentX += BIT_BOX_WIDTH + OFFSET;
+
+        if (currentBox.isDeletingAnimation) continue;
+
+        if ((currentBox.getText == binNumber[textIndex] && currentBox.getNextText == binNumber[textIndex]) || (currentBox.getText != binNumber[textIndex] && currentBox.getNextText == binNumber[textIndex])) continue;
+
+        currentBox.changeText(binNumber[textIndex]);
+        numberBits_decNumber[i] = currentBox;
+    }
 }
 
 function SumeOfTwoDec() {
-
+    
 }
 
 function Animate(currentTime) {
     ClearCanvasWithTransforms(OUTPUT_DECIMAL_SUM_CTX, OUTPUT_DECIMAL_SUM, GetCSSColor('--canva-color'));
+    ClearCanvasWithTransforms(OUTPUT_DECIMAL_TO_BINARY_NUMBER_CTX, OUTPUT_DECIMAL_TO_BINARY_NUMBER, GetCSSColor('--canva-color'));
 
-    let newList = [numberBits_addition_1, numberBits_addition_2]
+    let newList = [numberBits_decNumber, numberBits_addition_1, numberBits_addition_2]
     for (let currentList of newList) {
         for (let currBoxIndex = 0; currBoxIndex < currentList.length; currBoxIndex++) {
             let box = currentList[currBoxIndex];
@@ -67,7 +99,7 @@ function EventListeners() {
 function AddBit(event) {
     const BIT_BOX_WIDTH = 25;
     const BIT_BOX_HEIGHT = 25;
-    const OFFSET = 5
+    const OFFSET = 5;
 
     let binNumber = "";
     if (IsNumber(event.target.value)) {
