@@ -1,0 +1,125 @@
+:root {
+    /** --- Colors --- **/
+    --color-text: #F9F9F9;
+
+    --color-background: #252525;
+    --color-background-line: #353839;
+    --color-navigation: #353839AA;
+    --color-footer: #353839AA;
+
+    --color-button: #4A5568;
+    --color-button-hover: #253D46;
+
+    --color-input: #2D3748;
+    --color-input-selected: #00303B;
+
+    /** --- Other --- **/
+    --main-padding: 10px;
+    --background-size: 65px;
+
+    --button-glowing-intensity: 8px;
+    --button-glowing-spreading: 3px;
+
+    --input-border: 2px;
+    --input-border-radius: 7px;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+    grid-template-rows: 1fr auto;
+    column-gap: 5px;
+    min-height: 100vh;
+
+    font-family: 'Exo 2', sans-serif;
+
+    background-color: var(--color-background);
+    background-image: 
+        linear-gradient(to right, var(--color-background-line) 2px, transparent 2px), 
+        linear-gradient(to bottom, var(--color-background-line) 2px, transparent 2px);
+    background-size: var(--background-size) var(--background-size);
+
+    color: var(--color-text);
+
+    animation: movingBackground 15s linear infinite;
+}
+
+nav {
+    background-color: var(--color-navigation); 
+    padding: 10px;
+}
+
+main {
+    padding: var(--main-padding);
+}
+
+footer {
+    grid-column: 1 / span 2;
+    
+    background-color: var(--color-footer);
+    text-align: center;
+    padding: 10px;
+    
+    position: relative; 
+}
+
+button {
+    font-family: 'Exo 2', sans-serif;
+
+    border: 0;
+
+    background-color: var(--color-button);
+    box-shadow: 0 0 var(--button-glowing-intensity) var(--button-glowing-spreading) var(--color-button);
+    color: var(--color-text);
+    margin: 7px auto;
+    padding: 6px;
+
+    transition: 0.25s linear;
+}
+
+button:hover {
+    background-color: var(--color-button-hover);
+    box-shadow: 0 0 var(--button-glowing-intensity) var(--button-glowing-spreading) var(--color-button-hover);
+}
+
+input {
+    font-family: 'Exo 2', sans-serif;
+
+    border: var(--input-border) solid var(--color-input);
+    border-radius: var(--input-border-radius);
+
+    background-color: var(--color-input);
+    color: var(--color-text);
+    margin: 7px auto;
+    padding: 6px;
+
+    transition: 0.25s linear;
+}
+
+input::placeholder {
+    font-family: 'Exo 2', sans-serif;
+
+    color: var(--color-text);
+}
+
+input:focus {
+    background-color: var(--color-input-selected);
+}
+
+body.is-loading * {
+  transition: none !important;
+}
+
+@keyframes movingBackground {
+    0% {
+        background-position: 0px 0px;
+    }
+    100% {
+        background-position: var(--background-size) var(--background-size);
+    }
+}
