@@ -46,6 +46,10 @@ function GetCSSColor(colorTag) {
     return mainColor;
 }
 
+const ScrollToRight = (element) => {
+    element.scrollLeft = element.scrollWidth;
+};
+
 class BitBox {
     constructor(ctx, posX, posY, width, height, radius, color, text, glowing = false, glowingIntensity = 5) {
         this.ctx = ctx;
@@ -63,7 +67,7 @@ class BitBox {
 
         this.text = text;
         this.nextText = text;
-        this.fontSize = Math.min((width - 10) / (text.length || 1), height * 0.8);
+        this.fontSize = Math.min((width - 10) / (text.length || 1), height * 0.9);
 
         this.isAppearing = false;
         this.isChanging = false;
@@ -194,7 +198,7 @@ class BitBox {
         this.ctx.restore();
     }
 
-    position(newPositionX, newPositionY) {
+    setPosition(newPositionX, newPositionY) {
         this.positionX = newPositionX;
         this.positionY = newPositionY;
     }
@@ -203,4 +207,5 @@ class BitBox {
     get canDelete() { return this.deleted; }
     get getText() { return this.text; }
     get isDeletingAnimation() { return this.isDeleting; }
+    get position() { return {"x": this.positionX, "y": this.positionY}}
 }

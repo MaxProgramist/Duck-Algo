@@ -5,6 +5,7 @@
     --color-background: #252525;
     --color-background-line: #353839;
     --color-navigation: #353839AA;
+    --color-header_1: #353839AA;
     --color-footer: #353839AA;
 
     --color-button: #4A5568;
@@ -12,6 +13,10 @@
 
     --color-input: #2D3748;
     --color-input-selected: #5A67D8;
+
+    --color-scrollbar: #4A5568;
+    --color-scrollbar-hover: #667EEA;
+    --color-scrollbar-background: #00000000;
 
     /** --- Other --- **/
     --main-padding: 10px;
@@ -26,12 +31,17 @@
 
 html, body {
     height: 100%;
+    width: 100%;
     margin: 0;
 }
 
 body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+
     display: grid;
-    grid-template-columns: 1fr 6fr;
+    grid-template-columns: 150px minmax(0, 1fr);;
     grid-template-rows: 1fr auto;
     column-gap: 5px;
     min-height: 100vh;
@@ -56,6 +66,9 @@ nav {
 
 main {
     padding: var(--main-padding);
+
+    max-width: 100vw; 
+    box-sizing: border-box;
 }
 
 footer {
@@ -111,8 +124,51 @@ input:focus {
     background-color: var(--color-input-selected);
 }
 
+canvas {
+    display: block;
+    max-width: none;
+}
+
 body.is-loading * {
   transition: none !important;
+}
+
+.canvasContainer {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    border-radius: 15px;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.canvasContainer::-webkit-scrollbar {
+    height: 8px;
+    background-color: var(--color-scrollbar-background);
+}
+
+.canvasContainer::-webkit-scrollbar-track {
+    background: var(--color-scrollbar-background);
+    border-radius: 10px;
+}
+
+.canvasContainer::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.canvasContainer::-webkit-scrollbar-thumb:hover {
+    background: var(--color-scrollbar-hover);
+    background-clip: content-box;
+}
+
+.canvasContainer::-webkit-scrollbar-button {
+    visibility: hidden;
 }
 
 @keyframes movingBackground {
@@ -121,5 +177,12 @@ body.is-loading * {
     }
     100% {
         background-position: var(--background-size) var(--background-size);
+    }
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    .canvasContainer {
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-scrollbar) var(--color-scrollbar-background);
     }
 }
