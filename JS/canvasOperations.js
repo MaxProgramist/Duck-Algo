@@ -1,9 +1,3 @@
-function ResizeCanva(canvaElement) {
-    let parentContainer = canvaElement.parentNode;
-    
-    canvaElement.width = parentContainer.clientWidth;
-}
-
 function ClearCanvasWithTransforms(ctx, canvas, color, radius=15) {
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -49,6 +43,10 @@ function GetCSSColor(colorTag) {
 const ScrollToRight = (element) => {
     element.scrollLeft = element.scrollWidth;
 };
+
+function EaseOutCubic(x) {
+    return 1 - Math.pow(1 - x, 3);
+}    
 
 class BitBox {
     constructor(ctx, posX, posY, width, height, radius, color, text, glowing = false, glowingIntensity = 5) {
