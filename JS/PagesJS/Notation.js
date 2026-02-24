@@ -160,7 +160,7 @@ EventListeners();
 requestAnimationFrame(Animate);
 
 //* ---------- Functions ----------
-function Input_DecToBin(event, canva_ctx, canBeNegative) {
+function Input_IntDecToBin(event, canva_ctx, canBeNegative) {
     let binNumber = "";
     if (IsNumber(event.target.value)) {
         let number = clamp(parseInt(event.target.value), -2147483648, 2147483647);
@@ -203,6 +203,42 @@ function Input_DecToBin(event, canva_ctx, canBeNegative) {
 
     if (canBeNegative) animationState.decToBin.bits.negative = currentList;
     else animationState.decToBin.bits.positive = currentList;
+}
+
+function Input_FloatDecToBin(event, canva_ctx) {
+    let floatBinary = DecToBin_Float(event.target);
+
+    let currentList = animationState.decToBin.bits.float;
+    if (currentList.length < floatBinary.length) {
+        for (let i = currentList.length; i<floatBinary.length; i++) {
+            let currentBit = floatBinary[i];
+            let boxColor = BitColor(i, floatBinary.length);
+            let currentBox = new BitBox(canva_ctx, 0, 0, Bit_BOX_PARAM.width, Bit_BOX_PARAM.height, 6, boxColor, currentBit, true, 15);
+            currentBox.startAppear(TIME_TO_APEAR);
+            currentList.push(currentBox);
+        }
+    } else if (currentList.length > floatBinary.length) {
+        for (let i = floatBinary.length; i<currentList.length; i++) currentList[i].startDelete(TIME_TO_DISAPEAR);
+    }
+
+    let currentX = Bit_BOX_PARAM.offset*2.5;
+    let currentY = Bit_BOX_PARAM.offset*2.5;
+
+    for (let i = 0; i<currentList.length; i++) {
+        let currentBox = currentList[i], textIndex = Math.min(floatBinary.length-1, i);
+        currentBox.setPosition(currentX, currentY);
+        currentX += Bit_BOX_PARAM.width + Bit_BOX_PARAM.offset;
+
+        if (currentBox.isDeletingAnimation) {
+            if (currentList.length != floatBinary.length) continue;
+            else currentBox.changeText(currentBox.getText);
+        }
+
+        if ((currentBox.getText == floatBinary[textIndex] && currentBox.getNextText == floatBinary[textIndex]) || (currentBox.getText != floatBinary[textIndex] && currentBox.getNextText == floatBinary[textIndex])) continue;
+
+        currentBox.changeText(floatBinary[textIndex]);
+        currentList[i] = currentBox;
+    }
 }
 
 function Addition(currentTime) {
@@ -723,12 +759,15 @@ function EventListeners() {
     INPUT_DECIMAL_TO_BINARY_NUMBER_POSITIVE.addEventListener('input', 
         (event) => { Input_Filter(event, false); });
     INPUT_DECIMAL_TO_BINARY_NUMBER_POSITIVE.addEventListener('input', 
-        (event) => { Input_DecToBin(event, OUTPUT_DECIMAL_TO_BINARY_NUMBER_POSITIVE_CTX, false); });
+        (event) => { Input_IntDecToBin(event, OUTPUT_DECIMAL_TO_BINARY_NUMBER_POSITIVE_CTX, false); });
 
     INPUT_DECIMAL_TO_BINARY_NUMBER_NEGATIVE.addEventListener('input', 
         (event) => { Input_Filter(event, true); });
     INPUT_DECIMAL_TO_BINARY_NUMBER_NEGATIVE.addEventListener('input', 
-        (event) => { Input_DecToBin(event, OUTPUT_DECIMAL_TO_BINARY_NUMBER_NEGATIVE_CTX, true); });
+        (event) => { Input_IntDecToBin(event, OUTPUT_DECIMAL_TO_BINARY_NUMBER_NEGATIVE_CTX, true); });
+
+    INPUT_FLOAT_TO_BINARY_NUMBER.addEventListener('input', 
+        (event) => { Input_FloatDecToBin(event, OUTPUT_FLOAT_TO_BINARY_NUMBER_CTX); });
 
     INPUT_SUM_1.addEventListener('input', 
         (event) => { Input_Filter(event, true); });
@@ -903,6 +942,12 @@ function СanvasResize(canvasElement, width, height) {
     requestAnimationFrame(Animate);
 }
 
+function BitColor(indexOfBit, lenOfNumber) {
+    if (indexOfBit == 0) return GetCSSColor('--float-sign-color');
+    else if (indexOfBit < 9) return GetCSSColor('--float-power-color');
+    else return GetCSSColor('--float-mantissa-color');
+}
+
 function DecToBin(decimalNumber) {
     const BITS_IN_BYTE = 8;
 
@@ -925,6 +970,34 @@ function DecToBin(decimalNumber) {
     binaryResult += isNegative ? "1" : "0";
 
     return reverseString(binaryResult);
+}
+
+function DecToBin_Float(inputElement) {
+    const value = parseFloat(inputElement.value);
+    if (isNaN(value)) return "";
+
+    const MAX_FLOAT32 = 3.4028234663852886e+38;
+    const MIN_FLOAT32 = 1.1754943508222875e-38;
+    const ABSOLUTE_VALUE = Math.abs(value);
+
+    let buffer, view;
+
+    if (value !== 0 && (ABSOLUTE_VALUE > MAX_FLOAT32 || ABSOLUTE_VALUE < MIN_FLOAT32))
+        inputElement.value = clamp(ABSOLUTE_VALUE, MIN_FLOAT32, MAX_FLOAT32) * Math.sign(value);
+
+    buffer = new ArrayBuffer(4);
+    view = new DataView(buffer);
+    view.setFloat32(0, value, false);
+
+    let binaryString = "";
+    const BYTE_LENGTH = buffer.byteLength;
+
+    for (let i = 0; i < BYTE_LENGTH; i++) {
+        let bits = view.getUint8(i).toString(2).padStart(8, '0');
+        binaryString += bits;
+    }
+
+    return binaryString;
 }
 
 function Input_Filter(event, canBeNegative, type = "int") {
