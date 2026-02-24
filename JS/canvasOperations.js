@@ -83,6 +83,7 @@ class BitBox {
         this.nextText = nextText;
         this.isChanging = true;
         this.isAppearing = false;
+        this.isDeleting = false;
         this.shouldChangeText = true;
         this.animationDuration = timeMs;
         this.startTime = performance.now();
