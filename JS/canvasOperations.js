@@ -31,6 +31,25 @@ function RoundedRect(ctx, x, y, width, height, radius, color, useStroke = true, 
     if (useStroke) ctx.stroke();
 }
 
+function GlowingLine(ctx, startX, startY, endX, endY, lineWidth = 5, color, glowing = false, glowIntensity = 5) {
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = "round";
+
+    if (glowing) {
+        ctx.shadowBlur = glowIntensity;
+        ctx.shadowColor = color;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+    }
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.stroke();
+
+    ctx.shadowBlur = 0;
+}
+
 function GetCSSColor(colorTag) {
     const rootElement = document.documentElement;
     const computedStyle = getComputedStyle(rootElement);
