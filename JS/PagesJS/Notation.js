@@ -157,6 +157,10 @@ let animationState = {
         "timeStoper": 0,
         "currentY": 0,
         "copyLower": false,
+        "addingCurrNumber": false,
+        "addingAns": false,
+        "addingIndex": 0,
+        "ansBinary": 0,
         "hilight":{
             "object": null,
             "isMoving": false,
@@ -736,6 +740,47 @@ function Division() {
 
         animationState.division.hilight.object.setPosition(current_boxPosition.x, current_boxPosition.y);
     } else {
+        if (animationState.division.addingCurrNumber) {
+            let currentX = current_boxPosition.x + BIT_BOX_PARAM.offset - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * (animationState.division.bits.number_2.length - 1 - animationState.division.addingIndex);
+            let currChar = animationState.division.bits.number_2[animationState.division.addingIndex].getText;
+            let imaginatyBox = new BitBox(OUTPUT_DIVISION_CTX, currentX, animationState.division.currentY, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--imagery-color'), currChar, true, 15);
+            imaginatyBox.startAppear(TIME_TO_APEAR);
+            animationState.division.bits.additional.push(imaginatyBox);
+            animationState.division.addingIndex--;
+            
+            if (animationState.division.addingIndex < 0)  {
+                animationState.division.addingAns = true;
+                animationState.division.addingCurrNumber = false;
+                animationState.division.addingIndex = animationState.division.ansBinary.length - 1;
+                
+                animationState.division.currentY += BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset;
+            }
+
+            return requestAnimationFrame(Division);
+        } else if (animationState.division.addingAns) {
+            let currentX = current_boxPosition.x + BIT_BOX_PARAM.offset - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * (animationState.division.ansBinary.length - 1 - animationState.division.addingIndex);
+            let currChar = animationState.division.ansBinary[animationState.division.addingIndex];
+            let imaginatyBox = new BitBox(OUTPUT_DIVISION_CTX, currentX, animationState.division.currentY, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--imagery-color'), currChar, true, 15);
+            imaginatyBox.startAppear(TIME_TO_APEAR);
+            animationState.division.bits.additional.push(imaginatyBox);
+
+            animationState.division.addingIndex--;
+            console.log(animationState.division.addingIndex);
+
+            if (animationState.division.addingIndex < 0)  {
+                animationState.division.addingAns = false;
+                animationState.division.addingCurrNumber = false;
+                animationState.division.hilight.isMoving = true;
+
+                animationState.division.timeStoper = 0;
+                animationState.division.index++;
+                animationState.division.hilight.stop_x += BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset;
+            }
+
+            return requestAnimationFrame(Division);
+        }
+
+
         animationState.division.currentDivisionNum *= 2;
         animationState.division.currentDivisionNum += parseInt(animationState.division.bits.number_1[animationState.division.index].getText);
         
@@ -752,38 +797,23 @@ function Division() {
             ansBox_y = BIT_BOX_PARAM.offset*5 + BIT_BOX_PARAM.width;
         if (animationState.division.currentDivisionNum >= animationState.division.currentNum_2) {
             ansBox = new BitBox(OUTPUT_DIVISION_CTX, ansBox_x, ansBox_y, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), "1", true, 15);
+            ansBox.startAppear(TIME_TO_APEAR);
+            animationState.division.bits.additional.push(ansBox);
+            
             animationState.division.currentDivisionNum -= animationState.division.currentNum_2;
             animationState.division.currentY += BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset;
-            
-            let currentX = current_boxPosition.x + BIT_BOX_PARAM.offset;
-            for (let currInd = animationState.division.bits.number_2.length - 1; currInd >= 0; currInd--) {
-                let currChar = animationState.division.bits.number_2[currInd].getText;
-                let imaginatyBox = new BitBox(OUTPUT_DIVISION_CTX, currentX, animationState.division.currentY, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--imagery-color'), currChar, true, 15);
-                imaginatyBox.startAppear(TIME_TO_APEAR);
-                animationState.division.bits.additional.push(imaginatyBox);
 
-                currentX -= BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset
-            }
-
-            let currAnsBinNumber = DecToBin(animationState.division.currentDivisionNum);
-
-            animationState.division.currentY += BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset;
-            currentX = current_boxPosition.x + BIT_BOX_PARAM.offset;
-            for (let currInd = currAnsBinNumber.length - 1; currInd >= 0; currInd--) {
-                let currChar = currAnsBinNumber[currInd];
-                let imaginatyBox = new BitBox(OUTPUT_DIVISION_CTX, currentX, animationState.division.currentY, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--imagery-color'), currChar, true, 15);
-                imaginatyBox.startAppear(TIME_TO_APEAR);
-                animationState.division.bits.additional.push(imaginatyBox);
-
-                currentX -= BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset
-            }
+            animationState.division.ansBinary = DecToBin(animationState.division.currentDivisionNum);
+            animationState.division.addingCurrNumber = true;
+            animationState.division.addingIndex = animationState.division.bits.number_2.length - 1;
 
             animationState.division.copyLower = true;
+            return requestAnimationFrame(Division);
         } else {
             ansBox = new BitBox(OUTPUT_DIVISION_CTX, ansBox_x, ansBox_y, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), "0", true, 15);
+            ansBox.startAppear(TIME_TO_APEAR);
+            animationState.division.bits.additional.push(ansBox);
         }
-        ansBox.startAppear(TIME_TO_APEAR);
-        animationState.division.bits.additional.push(ansBox);
 
         animationState.division.hilight.isMoving = true;
         animationState.division.timeStoper = 0;
@@ -817,12 +847,12 @@ function StartAnimation_Division() {
         currNum += parseInt(animationState.division.bits.number_1[currInd].getText);
 
         if (currNum > currNum2) {
-            countOfOperations ++;
+            countOfOperations += (countOfOperations == 0)?3:2;
             currNum -= currNum2;
         }
     }
 
-    СanvasResize(OUTPUT_DIVISION, 1080, (countOfOperations + 5) * (BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset));
+    СanvasResize(OUTPUT_DIVISION, 1080, Math.max(countOfOperations + 1, 4) * (BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset));
 
     animationState.division.isPlaying = true;
     animationState.division.copyLower = false;
@@ -943,9 +973,9 @@ function EventListeners() {
     INPUT_MULTIPLICATION_2.addEventListener('input', AddBit);
 
     INPUT_DIVISION_1.addEventListener('input', 
-        (event) => { Input_Filter(event, true, "char"); });
+        (event) => { Input_Filter(event, false, "char"); });
     INPUT_DIVISION_2.addEventListener('input', 
-        (event) => { Input_Filter(event, true, "char"); });
+        (event) => { Input_Filter(event, false, "char"); });
     INPUT_DIVISION_1.addEventListener('input', AddBit);
     INPUT_DIVISION_2.addEventListener('input', AddBit);
 }
