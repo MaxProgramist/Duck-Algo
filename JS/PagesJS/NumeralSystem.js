@@ -12,10 +12,10 @@ const INPUT_FLOAT_TO_BINARY_NUMBER = document.getElementById('input_floatNumber'
 const OUTPUT_FLOAT_TO_BINARY_NUMBER = document.getElementById('output_floatNumber');
 const OUTPUT_FLOAT_TO_BINARY_NUMBER_CTX = OUTPUT_FLOAT_TO_BINARY_NUMBER.getContext("2d");
 
-const INPUT_SUM_1 = document.getElementById('input_decimalNumberSum_1');
-const INPUT_SUM_2 = document.getElementById('input_decimalNumberSum_2');
-const OUTPUT_SUM = document.getElementById('additionAnimation');
-const OUTPUT_SUM_CTX = OUTPUT_SUM.getContext("2d");
+const INPUT_ADDITION_1 = document.getElementById('input_decimalNumberAddition_1');
+const INPUT_ADDITION_2 = document.getElementById('input_decimalNumberAddition_2');
+const OUTPUT_ADDITION = document.getElementById('additionAnimation');
+const OUTPUT_ADDITION_CTX = OUTPUT_ADDITION.getContext("2d");
 
 const INPUT_SUBTRACTION_1 = document.getElementById('input_decimalNumberSubtraction_1');
 const INPUT_SUBTRACTION_2 = document.getElementById('input_decimalNumberSubtraction_2');
@@ -35,7 +35,7 @@ const OUTPUT_DIVISION_CTX = OUTPUT_DIVISION.getContext("2d");
 const OUTPUT_CTX = [
     {"ctx": OUTPUT_DECIMAL_TO_BINARY_NUMBER_POSITIVE_CTX, "canva": OUTPUT_DECIMAL_TO_BINARY_NUMBER_POSITIVE},
     {"ctx": OUTPUT_DECIMAL_TO_BINARY_NUMBER_NEGATIVE_CTX, "canva": OUTPUT_DECIMAL_TO_BINARY_NUMBER_NEGATIVE},
-    {"ctx": OUTPUT_SUM_CTX, "canva": OUTPUT_SUM},
+    {"ctx": OUTPUT_ADDITION_CTX, "canva": OUTPUT_ADDITION},
     {"ctx": OUTPUT_SUBTRACTION_CTX, "canva": OUTPUT_SUBTRACTION},
     {"ctx": OUTPUT_MULTIPLICATION_CTX, "canva": OUTPUT_MULTIPLICATION},
     {"ctx": OUTPUT_DIVISION_CTX, "canva": OUTPUT_DIVISION},
@@ -43,7 +43,7 @@ const OUTPUT_CTX = [
 ];
 
 window.onload = () => {
-    ScrollToRight(OUTPUT_SUM.parentElement);
+    ScrollToRight(OUTPUT_ADDITION.parentElement);
     ScrollToRight(OUTPUT_SUBTRACTION.parentElement);
     ScrollToRight(OUTPUT_MULTIPLICATION.parentElement);
 }
@@ -55,7 +55,7 @@ const BIT_BOX_PARAM = {width: 25, height: 25, offset: 5};
 const TIME_TO_APEAR = 500;
 const TIME_TO_DISAPEAR = 150;
 
-const MOVING_BOX_SPEED = -1.5;
+const MOVING_BOX_SPEED = -2;
 const LINE_RENDER_SPEED = 0.125;
 const TIME_TO_STOP = 15;
 
@@ -301,7 +301,7 @@ function Addition(currentTime) {
             let imaginaryBox_x = animationState.addition.hilight.stop_x - BIT_BOX_PARAM.width,
                 imaginaryBox_y = current_boxPosition.y - BIT_BOX_PARAM.height;
 
-            animationState.addition.imaginary.object = new BitBox(OUTPUT_SUM_CTX, imaginaryBox_x, imaginaryBox_y, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--imagery-color'), 1, true, 15);
+            animationState.addition.imaginary.object = new BitBox(OUTPUT_ADDITION_CTX, imaginaryBox_x, imaginaryBox_y, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--imagery-color'), 1, true, 15);
             animationState.addition.imaginary.object.startAppear(TIME_TO_APEAR);
             animationState.addition.bits.additional.push(animationState.addition.imaginary.object);
             }
@@ -310,7 +310,7 @@ function Addition(currentTime) {
         let ansBox_x = animationState.addition.hilight.stop_x + BIT_BOX_PARAM.offset,
             ansBox_y = current_boxPosition.y + BIT_BOX_PARAM.height * 2 + BIT_BOX_PARAM.offset * 3;
 
-        let ansBox = new BitBox(OUTPUT_SUM_CTX, ansBox_x, ansBox_y, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), ans.toString(), true, 15);
+        let ansBox = new BitBox(OUTPUT_ADDITION_CTX, ansBox_x, ansBox_y, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), ans.toString(), true, 15);
         ansBox.startAppear(TIME_TO_APEAR);
         animationState.addition.bits.additional.push(ansBox);
 
@@ -323,27 +323,27 @@ function Addition(currentTime) {
     if (animationState.addition.isPlaying) requestAnimationFrame(Addition);
 }
 
-function StartAnimation_Sum() {
+function StartAnimation_Addition() {
     if (animationState.addition.bits.number_1.length <= 0 && animationState.addition.bits.number_2.length <= 0) return;
     if (animationState.addition.isPlaying) return;
 
-    DeleteOperationResult("input_decimalNumberSum_1");
+    DeleteOperationResult("input_decimalNumberAddition_1");
 
     let hilight_witdh = BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset*2;
     let hilight_height = BIT_BOX_PARAM.height*2 + BIT_BOX_PARAM.offset*3;
 
-    let animation_addition_box_x = OUTPUT_SUM.width - BIT_BOX_PARAM.width * 2 - BIT_BOX_PARAM.offset*2;
+    let animation_addition_box_x = OUTPUT_ADDITION.width - BIT_BOX_PARAM.width * 2 - BIT_BOX_PARAM.offset*2;
     let animation_addition_box_y = BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset*2;
 
-    animationState.addition.hilight.object = new BitBox(OUTPUT_SUM_CTX, animation_addition_box_x, animation_addition_box_y, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, 15);
+    animationState.addition.hilight.object = new BitBox(OUTPUT_ADDITION_CTX, animation_addition_box_x, animation_addition_box_y, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, 15);
     animationState.addition.hilight.object.startAppear(TIME_TO_APEAR);
     animationState.addition.bits.additional.push(animationState.addition.hilight.object);
 
     let countOfNumbers = Math.max(animationState.addition.bits.number_1.length, animationState.addition.bits.number_2.length);
-    let sign_x = OUTPUT_SUM.width - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset)*(countOfNumbers+1) - BIT_BOX_PARAM.width,
+    let sign_x = OUTPUT_ADDITION.width - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset)*(countOfNumbers+1) - BIT_BOX_PARAM.width,
         sign_y = BIT_BOX_PARAM.height*2 + BIT_BOX_PARAM.offset;
 
-    animation_addition_sign = new BitBox(OUTPUT_SUM_CTX, sign_x, sign_y, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "+", true, 15);
+    animation_addition_sign = new BitBox(OUTPUT_ADDITION_CTX, sign_x, sign_y, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "+", true, 15);
     animation_addition_sign.startAppear(TIME_TO_APEAR);
     animationState.addition.bits.additional.push(animation_addition_sign);
 
@@ -501,7 +501,7 @@ function StartAnimation_Subtraction() {
     let hilight_witdh = BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset*2;
     let hilight_height = BIT_BOX_PARAM.height*2 + BIT_BOX_PARAM.offset*3;
 
-    let animation_box_x = OUTPUT_SUM.width - BIT_BOX_PARAM.width * 2 - BIT_BOX_PARAM.offset*2;
+    let animation_box_x = OUTPUT_ADDITION.width - BIT_BOX_PARAM.width * 2 - BIT_BOX_PARAM.offset*2;
     let animation_box_y = BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset*2;
 
     animationState.subtraction.hilight.object = new BitBox(OUTPUT_SUBTRACTION_CTX, animation_box_x, animation_box_y, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, 15);
@@ -509,7 +509,7 @@ function StartAnimation_Subtraction() {
     animationState.subtraction.bits.additional.push(animationState.subtraction.hilight.object);
 
     let countOfNumbers = Math.max(animationState.subtraction.bits.number_1.length, animationState.subtraction.bits.number_2.length);
-    let sign_x = OUTPUT_SUM.width - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset)*(countOfNumbers+1) - BIT_BOX_PARAM.width,
+    let sign_x = OUTPUT_ADDITION.width - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset)*(countOfNumbers+1) - BIT_BOX_PARAM.width,
         sign_y = BIT_BOX_PARAM.height*2 + BIT_BOX_PARAM.offset;
 
     animation_subtraction_sign = new BitBox(OUTPUT_SUBTRACTION_CTX, sign_x, sign_y, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "-", true, 15);
@@ -687,7 +687,7 @@ function StartAnimation_Multiplication() {
     animationState.multiplication.bits.additional.push(animationState.multiplication.hilight_2.object);
 
     let countOfNumbers = Math.max(animationState.multiplication.bits.number_1.length, animationState.multiplication.bits.number_2.length);
-    let sign_x = OUTPUT_SUM.width - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset)*(countOfNumbers+1) - BIT_BOX_PARAM.width,
+    let sign_x = OUTPUT_ADDITION.width - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset)*(countOfNumbers+1) - BIT_BOX_PARAM.width,
         sign_y = BIT_BOX_PARAM.height*2 + BIT_BOX_PARAM.offset;
 
     animation_multiplication_sign = new BitBox(OUTPUT_MULTIPLICATION_CTX, sign_x, sign_y, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "×", true, 15);
@@ -951,12 +951,12 @@ function EventListeners() {
     INPUT_FLOAT_TO_BINARY_NUMBER.addEventListener('input', 
         (event) => { Input_FloatDecToBin(event, OUTPUT_FLOAT_TO_BINARY_NUMBER_CTX); });
 
-    INPUT_SUM_1.addEventListener('input', 
+    INPUT_ADDITION_1.addEventListener('input', 
         (event) => { Input_Filter(event, true); });
-    INPUT_SUM_2.addEventListener('input', 
+    INPUT_ADDITION_2.addEventListener('input', 
         (event) => { Input_Filter(event, true); });
-    INPUT_SUM_1.addEventListener('input', AddBit);
-    INPUT_SUM_2.addEventListener('input', AddBit);
+    INPUT_ADDITION_1.addEventListener('input', AddBit);
+    INPUT_ADDITION_2.addEventListener('input', AddBit);
 
     INPUT_SUBTRACTION_1.addEventListener('input', 
         (event) => { Input_Filter(event, true); });
@@ -1065,8 +1065,8 @@ function IsOutOfBounds(index, listOfBitBoxes) {
 }
 
 function InputList(inputID) {
-    if (inputID == "input_decimalNumberSum_1") return animationState.addition.bits.number_1;
-    else if (inputID == "input_decimalNumberSum_2") return animationState.addition.bits.number_2;
+    if (inputID == "input_decimalNumberAddition_1") return animationState.addition.bits.number_1;
+    else if (inputID == "input_decimalNumberAddition_2") return animationState.addition.bits.number_2;
     else if (inputID == "input_decimalNumberSubtraction_1") return animationState.subtraction.bits.number_1;
     else if (inputID == "input_decimalNumberSubtraction_2") return animationState.subtraction.bits.number_2;
     else if (inputID == "input_decimalNumberMultiplication_1") return animationState.multiplication.bits.number_1;
@@ -1078,8 +1078,8 @@ function InputList(inputID) {
 }
 
 function OutputList(inputID, list) {
-    if (inputID == "input_decimalNumberSum_1") animationState.addition.bits.number_1 = list;
-    else if (inputID == "input_decimalNumberSum_2") animationState.addition.bits.number_2 = list;
+    if (inputID == "input_decimalNumberAddition_1") animationState.addition.bits.number_1 = list;
+    else if (inputID == "input_decimalNumberAddition_2") animationState.addition.bits.number_2 = list;
     else if (inputID == "input_decimalNumberSubtraction_1") animationState.subtraction.bits.number_1 = list;
     else if (inputID == "input_decimalNumberSubtraction_2") animationState.subtraction.bits.number_2 = list;
     else if (inputID == "input_decimalNumberMultiplication_1") animationState.multiplication.bits.number_1 = list;
@@ -1089,7 +1089,7 @@ function OutputList(inputID, list) {
 }
 
 function CanType(inputID) {
-    if (inputID == "input_decimalNumberSum_1" || inputID == "input_decimalNumberSum_2") return !animationState.addition.isPlaying;
+    if (inputID == "input_decimalNumberAddition_1" || inputID == "input_decimalNumberAddition_2") return !animationState.addition.isPlaying;
     if (inputID == "input_decimalNumberSubtraction_1" || inputID == "input_decimalNumberSubtraction_2") return !animationState.subtraction.isPlaying;
     if (inputID == "input_decimalNumberMultiplication_1" || inputID == "input_decimalNumberMultiplication_2") return !animationState.multiplication.isPlaying;
     if ((inputID == "input_decimalNumberDivision_1" || inputID == "input_decimalNumberDivision_2")) return !animationState.division.isPlaying;
@@ -1097,7 +1097,7 @@ function CanType(inputID) {
 }
 
 function SecondNumber(inputID) {
-    if (inputID == "input_decimalNumberSum_2") return true;
+    if (inputID == "input_decimalNumberAddition_2") return true;
     else if (inputID == "input_decimalNumberSubtraction_2") return true;
     else if (inputID == "input_decimalNumberMultiplication_2") return true;
     else if (inputID == "input_decimalNumberDivision_2") return true;
@@ -1106,7 +1106,7 @@ function SecondNumber(inputID) {
 }
 
 function DeleteOperationResult(inputID) {
-    if ((inputID == "input_decimalNumberSum_1" || inputID == "input_decimalNumberSum_2"))
+    if ((inputID == "input_decimalNumberAddition_1" || inputID == "input_decimalNumberAddition_2"))
         for (let currBox of animationState.addition.bits.additional)
             currBox.startDelete(TIME_TO_DISAPEAR);
     else if ((inputID == "input_decimalNumberSubtraction_1" || inputID == "input_decimalNumberSubtraction_2"))
@@ -1130,7 +1130,7 @@ function DeleteOperationResult(inputID) {
 }
 
 function GetCanvaAndCtx(inputID) {
-    if (inputID == "input_decimalNumberSum_1" || inputID == "input_decimalNumberSum_2")
+    if (inputID == "input_decimalNumberAddition_1" || inputID == "input_decimalNumberAddition_2")
         return OUTPUT_CTX[2];
 
     if (inputID == "input_decimalNumberSubtraction_1" || inputID == "input_decimalNumberSubtraction_2")
