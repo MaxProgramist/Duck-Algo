@@ -2,23 +2,23 @@ function ClearCanvasWithTransforms(ctx, canvas, color, radius=15) {
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    RoundedRect(ctx, 0, 0, canvas.width, canvas.height, radius, color, false);
+    RoundedRect(ctx, new Point(0, 0), canvas.width, canvas.height, radius, color, false);
     ctx.restore();
 }
 
-function DrawText(ctx, text, posX, posY, fontSize = 30, font = "'Exo 2'") {
+function DrawText(ctx, text, point, fontSize = 30, font = "'Exo 2'") {
     ctx.font = `${fontSize}px ${font}, sans-serif`;
-    ctx.fillText(text, posX, posY);
+    ctx.fillText(text, point.x, point.y);
 }
 
-function RoundedRect(ctx, x, y, width, height, radius, color, useStroke = true, glowing = false, glowIntensity = 5) {
+function RoundedRect(ctx, point, width, height, radius, color, useStroke = true, glowing = false, glowIntensity = 5) {
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.moveTo(x, y + radius);
-    ctx.arcTo(x, y + height, x + radius, y + height, radius);
-    ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
-    ctx.arcTo(x + width, y, x + width - radius, y, radius);
-    ctx.arcTo(x, y, x, y + radius, radius);
+    ctx.moveTo(point.x, point.y + radius);
+    ctx.arcTo(point.x, point.y + height, point.x + radius, point.y + height, radius);
+    ctx.arcTo(point.x + width, point.y + height, point.x + width, point.y + height - radius, radius);
+    ctx.arcTo(point.x + width, point.y, point.x + width - radius, point.y, radius);
+    ctx.arcTo(point.x, point.y, point.x, point.y + radius, radius);
 
     if (glowing) {
         ctx.shadowBlur = glowIntensity;
@@ -67,12 +67,25 @@ function EaseOutCubic(x) {
     return 1 - Math.pow(1 - x, 3);
 }    
 
+class Point {
+    constructor(x, y) {
+        this.xValue = x;
+        this.yValue = y;
+    }
+
+    get x() { return this.xValue; }
+    get y() { return this.yValue; } 
+    set x(newX) { this.xValue = newX; }
+    set y(nexY) { this.yValue = nexY; } 
+
+    get clone() { return new Point(this.xValue, this.yValue); }
+}
+
 class BitBox {
-    constructor(ctx, posX, posY, width, height, radius, color, text, glowing = false, glowingIntensity = 5) {
+    constructor(ctx, point, width, height, radius, color, text, glowing = false, glowingIntensity = 5) {
         this.ctx = ctx;
 
-        this.positionX = posX;
-        this.positionY = posY;
+        this.point = point;
 
         this.width = width;
         this.height = height;
@@ -199,31 +212,27 @@ class BitBox {
     draw() {
         this.ctx.save();
 
-        let centerX = this.positionX + this.width/2,
-            centerY = this.positionY + this.height/2;
-
-        this.ctx.translate(centerX, centerY);
+        this.ctx.translate(this.point.x + this.width/2, this.point.y + this.height/2);
         this.ctx.scale(1, this.currentScale);
 
-        RoundedRect(this.ctx, -this.width/2, -this.height/2, this.width, this.height, this.radius, this.color, !this.glowing, this.glowing, this.glowingIntensity);
+        let posToDraw = new Point(-this.width/2, -this.height/2);
+
+        RoundedRect(this.ctx, posToDraw, this.width, this.height, this.radius, this.color, !this.glowing, this.glowing, this.glowingIntensity);
 
         this.ctx.textAlign = "center";
         this.ctx.textBaseline = "middle";
         this.ctx.fillStyle = "#000000";
 
-        DrawText(this.ctx, this.text, 0, 0, this.fontSize);
+        DrawText(this.ctx, this.text, new Point(0, 0), this.fontSize);
 
         this.ctx.restore();
-    }
-
-    setPosition(newPositionX, newPositionY) {
-        this.positionX = newPositionX;
-        this.positionY = newPositionY;
     }
 
     get getNextText() {return this.nextText; }
     get canDelete() { return this.deleted; }
     get getText() { return this.text; }
     get isDeletingAnimation() { return this.isDeleting; }
-    get position() { return {"x": this.positionX, "y": this.positionY}}
+    get position() { return this.point; }
+    get getCTX() { return this.ctx; }
+    set position(point) { this.point = point; }
 }
