@@ -15,6 +15,3 @@ This is a small site for demonstration of different algorithms in programming, a
     <td> Cominng soon... </td>
   </tr>
 </ul>
-
-Current version: 1.0.0
-
