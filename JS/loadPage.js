@@ -13,7 +13,10 @@ async function MakePageButtons(path) {
     for (let currElement of DATA.pages) {
         let newButton = document.createElement('button');
         newButton.textContent = currElement.title; 
-        newButton.onclick = () => LoadPage(currElement.path);
+        let currentPathToPage = currElement.path;
+        if (CURRENT_PAGE !== "index.html" && CURRENT_PAGE !== "")
+            currentPathToPage = currentPathToPage.replace(/^Pages[\\/]/, "");
+        newButton.onclick = () => LoadPage(currentPathToPage);
         newButton.type = "button";
 
         NAVIGATION.appendChild(newButton);
