@@ -12,6 +12,18 @@ This is a small site for demonstration of different algorithms in programming, a
     </td>
   </tr>
   <tr>
+    <td> Bitwise operation </td>
+    <td> 
+      <ul>
+        <li> Shows and explaining how <b>Bit OR</b> is working </li>
+        <li> Shows and explaining how <b>Bit AND</b> is working </li>
+        <li> Shows and explaining how <b>Bit XOR</b> is working </li>
+        <li> Shows and explaining how <b>Bit NOT</b> is working </li>
+        <li> Shows and explaining how <b>Bit LEFT/RIGHT SHIFT</b> is working </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
     <td> Cominng soon... </td>
   </tr>
 </ul>

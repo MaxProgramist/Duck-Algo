@@ -85,6 +85,7 @@ button {
     font-family: 'Exo 2', sans-serif;
 
     border: 0;
+    border-radius: 8px;
 
     background-color: var(--color-button);
     box-shadow: 0 0 var(--button-glowing-intensity) var(--button-glowing-spreading) var(--color-button);
@@ -122,6 +123,32 @@ input::placeholder {
 
 input:focus {
     background-color: var(--color-input-selected);
+}
+
+select {
+    font-family: 'Exo 2', sans-serif;
+
+    border: var(--input-border) solid var(--color-input);
+    border-radius: var(--input-border-radius);
+
+    background-color: var(--color-input);
+    color: var(--color-text);
+    margin: 7px auto;
+    padding: 6px;
+
+    transition: 0.25s linear;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 5px;
+}
+
+th, td {
+    padding: 3px 10px 3px 10px;
+    text-align: center;
+
+    border-radius: 7px;
 }
 
 canvas {

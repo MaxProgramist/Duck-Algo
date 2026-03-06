@@ -3,7 +3,7 @@
     --bitBox-color: #00E5FF;
     --hilight-color: #ED8936; 
     --ansBox-color: #48BB78;
-    --imagery-color: #ECC94B;
+    --imaginary-color: #ECC94B;
 
     --float-sign-color: #00E5FF;
     --float-power-color: #ECC94B;
@@ -17,6 +17,6 @@
     margin: auto 2px;
 }
 
-#button_sum, #button_Subtraction, #button_Multiplication, #button_Division{
-    margin-left: 10px;
+#button_Addition, #button_Subtraction, #button_Multiplication, #button_Division{
+    margin-left: 8px;
 }

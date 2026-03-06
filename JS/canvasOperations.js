@@ -97,7 +97,7 @@ class BitBox {
 
         this.text = text;
         this.nextText = text;
-        this.fontSize = Math.min((width - 10) / (text.length || 1), height * 0.9);
+        this.fontSize = this.#FontSize();
 
         this.isAppearing = false;
         this.isChanging = false;
@@ -175,7 +175,7 @@ class BitBox {
         } else {
             if (this.shouldChangeText) {
                 this.text = this.nextText;
-                this.fontSize = Math.min((this.width - 10) / (this.text.length || 1), this.height * 0.8);
+                this.fontSize = this.#FontSize();
 
                 this.shouldChangeText = false; 
             }
@@ -207,6 +207,10 @@ class BitBox {
             this.currentScale = 0;
             this.deleted = true;
         }
+    }
+
+    #FontSize() {
+        return Math.min((this.width - 5) / ((this.text.length/2) || 1), this.height * 0.8);
     }
 
     draw() {

@@ -1,0 +1,20 @@
+:root {
+    --canva-color: #353839AA;
+    --bitBox-color: #00E5FF;
+    --hilight-color: #ED8936; 
+    --ansBox-color: #48BB78;
+    --imaginary-color: #ECC94B;
+    --error-color: #F56565;
+}
+
+#input_bitOr_1, #input_bitOr_2,
+#input_bitAnd_1, #input_bitAnd_2,
+#input_bitXor_1, #input_bitXor_2,
+#input_bitShift_1, #input_bitShift_2,
+#input_bitNot, #shiftDirection {
+    margin: auto 2px;
+}
+
+#button_bitOr, #button_bitAnd, #button_bitXor, #button_bitNot, #button_bitShift {
+    margin-left: 8px;
+}
