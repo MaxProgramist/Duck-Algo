@@ -3,6 +3,8 @@ function LoadPage(pagePath) {
 }
 
 async function MakePageButtons(path) {
+    if (path.includes("Pages"))
+        path = path.replace(/^.*[\\/]Pages[\\/]/, "");
     const JSON_FILE = await fetch(path);
     const DATA = await JSON_FILE.json();
     const NAVIGATION = document.getElementsByTagName('nav')[0];

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta lang="ua">
+
+        <script src="..\\JS\loading_page.js"></script>
+        <script src="..\\JS\loadPage.js"></script>
+
+        <link rel="stylesheet" href="..\\CSS\style.css">
+        <link rel="stylesheet" href="..\\CSS\PagesCSS\BinaryOperation.css">
+        <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;800&display=swap" rel="stylesheet">
+        <title> Duck Algo </title>
+    </head>
+    <body>
+        <nav>
+            <button type="button" onclick="LoadPage(`..\\index.html`)"> Головна </button> <br>
+            Всі сторінки: <br>
+        </nav>
+        <main>
+            <div>
+                <h1> Тема сторінки </h1>
+                <div style="width: 100%;">
+                    <div>
+                        <h2> Вступ </h2>
+                        <p> * Про тему * </p>
+                    </div>
+                    <div>
+                        <h2> Пункт 1 </h2>
+                        <p> * про пункт 1 * </p>
+                        <div id="interaction">
+                            <input id="input_" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
+                            <input id="input_" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
+                            <button id="button_" type="button" onclick=""> Почати анімацію </button> <br>
+                            <div class="canvasContainer">
+                                <canvas id="output_" width="1010" height="105"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            Made by DuckMim.
+        </footer>
+        
+        <script src="..\\JS\canvasOperations.js"></script>
+        <!-- ! ЗМІНИТИ НАЗВУ ФАЙЛА У ВІДПОВІДНІСТЬ ДО СТОРІНКИ -->
+        <script src="..\\JS\PagesJS\BinaryOperation.js"></script>
+    </body>
+</html>
