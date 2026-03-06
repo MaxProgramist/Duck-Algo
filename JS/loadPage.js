@@ -3,7 +3,8 @@ function LoadPage(pagePath) {
 }
 
 async function MakePageButtons(path) {
-    if (path.includes("Pages"))
+    const CURRENT_PAGE = window.location.pathname.split("/").pop();
+    if (!(CURRENT_PAGE === "index.html" || CURRENT_PAGE === ""))
         path = path.replace(/^.*[\\/]Pages[\\/]/, "");
     const JSON_FILE = await fetch(path);
     const DATA = await JSON_FILE.json();
