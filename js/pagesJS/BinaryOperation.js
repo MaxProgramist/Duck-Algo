@@ -1,27 +1,34 @@
+import { DecToBin, Input_Filter, IsNumber } from '../utility.js'
+
 //* ---------- Variables ---------- *//
 //* -------- HTML Elements -------- *//
 const INPUT_BIT_OR_1 = document.getElementById('input_bitOr_1');
 const INPUT_BIT_OR_2 = document.getElementById('input_bitOr_2');
+const BUTTON_BIT_OR = document.getElementById('button_bitOr');
 const OUTPUT_BIT_OR = document.getElementById('output_bitOr');
 const OUTPUT_BIT_OR_CTX = OUTPUT_BIT_OR.getContext("2d");
 
 const INPUT_BIT_AND_1 = document.getElementById('input_bitAnd_1');
 const INPUT_BIT_AND_2 = document.getElementById('input_bitAnd_2');
+const BUTTON_BIT_AND = document.getElementById('button_bitAnd');
 const OUTPUT_BIT_AND = document.getElementById('output_bitAnd');
 const OUTPUT_BIT_AND_CTX = OUTPUT_BIT_AND.getContext("2d");
 
 const INPUT_BIT_XOR_1 = document.getElementById('input_bitXor_1');
 const INPUT_BIT_XOR_2 = document.getElementById('input_bitXor_2');
+const BUTTON_BIT_XOR = document.getElementById('button_bitXor');
 const OUTPUT_BIT_XOR = document.getElementById('output_bitXor');
 const OUTPUT_BIT_XOR_CTX = OUTPUT_BIT_XOR.getContext("2d");
 
 const INPUT_BIT_NOT = document.getElementById('input_bitNot');
+const BUTTON_BIT_NOT = document.getElementById('button_bitNot');
 const OUTPUT_BIT_NOT = document.getElementById('output_bitNot');
 const OUTPUT_BIT_NOT_CTX = OUTPUT_BIT_NOT.getContext("2d");
 
 const INPUT_BIT_SHIFT_1 = document.getElementById('input_bitShift_1');
 const INPUT_BIT_SHIFT_2 = document.getElementById('input_bitShift_2');
 const INPUT_BIT_SHIFT_DIRECTION = document.getElementById('shiftDirection');
+const BUTTON_BIT_SHIFT = document.getElementById('button_bitShift');
 const OUTPUT_BIT_SHIFT = document.getElementById('output_bitShift');
 const OUTPUT_BIT_SHIFT_CTX = OUTPUT_BIT_SHIFT.getContext("2d");
 
@@ -60,7 +67,6 @@ const TIME_TO_APEAR = 500;
 const TIME_TO_DISAPEAR = 150;
 
 const MOVING_BOX_SPEED = -2;
-const LINE_RENDER_SPEED = 0.125;
 const TIME_TO_STOP = 15;
 
 const ANIMATION_NAMES = ["bitOr", "bitAnd", "bitXor", "bitNot", "bitShift"];
@@ -235,9 +241,9 @@ function StartAnimation(ansFunction, canvaIndex, operationText, operationName) {
     let ansBox_point = new Point(CURRENT_CANVA_CTX.canva.width - BIT_BOX_PARAM.width*scale - BIT_BOX_PARAM.offset * 2 - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * countOfNumbers,
         BIT_BOX_PARAM.height*0.5 + BIT_BOX_PARAM.offset*2.5);
 
-    animation_addition_sign = new BitBox(CURRENT_CANVA_CTX.ctx, ansBox_point, BIT_BOX_PARAM.width*scale, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), operationText, true, 15);
-    animation_addition_sign.startAppear(TIME_TO_APEAR);
-    animationState[operationName].bits.additional.push(animation_addition_sign);
+    let animation_bit_sign = new BitBox(CURRENT_CANVA_CTX.ctx, ansBox_point, BIT_BOX_PARAM.width*scale, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), operationText, true, 15);
+    animation_bit_sign.startAppear(TIME_TO_APEAR);
+    animationState[operationName].bits.additional.push(animation_bit_sign);
 
     animationState[operationName].isPlaying = true;
     animationState[operationName].hilight.isMoving = false;
@@ -306,9 +312,9 @@ function StartAnimation_BitNot() {
     let countOfNumbers = animationState.bitNot.bits.number.length;
     let ansBox_point = new Point(OUTPUT_BIT_NOT.width - BIT_BOX_PARAM.width*1.5 - BIT_BOX_PARAM.offset * 2 - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * countOfNumbers, BIT_BOX_PARAM.offset*2);
 
-    animation_addition_sign = new BitBox(OUTPUT_BIT_NOT_CTX, ansBox_point, BIT_BOX_PARAM.width*1.5, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "not", true, 15);
-    animation_addition_sign.startAppear(TIME_TO_APEAR);
-    animationState.bitNot.bits.additional.push(animation_addition_sign);
+    let animation_not_sign = new BitBox(OUTPUT_BIT_NOT_CTX, ansBox_point, BIT_BOX_PARAM.width*1.5, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "not", true, 15);
+    animation_not_sign.startAppear(TIME_TO_APEAR);
+    animationState.bitNot.bits.additional.push(animation_not_sign);
 
     animationState.bitNot.isPlaying = true;
     animationState.bitNot.hilight.isMoving = false;
@@ -391,9 +397,9 @@ function StartAnimation_BitShift() {
     let countOfNumbers = animationState.bitShift.bits.number.length;
     let ansBox_point = new Point(OUTPUT_BIT_NOT.width - BIT_BOX_PARAM.width*1.5 - BIT_BOX_PARAM.offset * 2 - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * countOfNumbers, BIT_BOX_PARAM.offset*2);
 
-    animation_addition_sign = new BitBox(OUTPUT_BIT_SHIFT_CTX, ansBox_point, BIT_BOX_PARAM.width*1.5, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "shift", true, 15);
-    animation_addition_sign.startAppear(TIME_TO_APEAR);
-    animationState.bitShift.bits.additional.push(animation_addition_sign);
+    let animation_shift_sign = new BitBox(OUTPUT_BIT_SHIFT_CTX, ansBox_point, BIT_BOX_PARAM.width*1.5, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "shift", true, 15);
+    animation_shift_sign.startAppear(TIME_TO_APEAR);
+    animationState.bitShift.bits.additional.push(animation_shift_sign);
 
     animationState.bitShift.isPlaying = true;
     animationState.bitShift.hilight.isMoving = false;
@@ -444,6 +450,7 @@ function EventListeners() {
         (event) => { Input_Filter(event, true); });
     INPUT_BIT_OR_1.addEventListener('input', AddBit);
     INPUT_BIT_OR_2.addEventListener('input', AddBit);
+    BUTTON_BIT_OR.addEventListener('click', () => StartAnimation(((a, b) => a | b), 0, 'or', 'bitOr'));
 
     INPUT_BIT_AND_1.addEventListener('input', 
         (event) => { Input_Filter(event, true); });
@@ -451,6 +458,7 @@ function EventListeners() {
         (event) => { Input_Filter(event, true); });
     INPUT_BIT_AND_1.addEventListener('input', AddBit);
     INPUT_BIT_AND_2.addEventListener('input', AddBit);
+    BUTTON_BIT_AND.addEventListener('click', () => StartAnimation(((a, b) => a & b), 1, 'and', 'bitAnd'));
 
     INPUT_BIT_XOR_1.addEventListener('input', 
         (event) => { Input_Filter(event, true); });
@@ -458,16 +466,19 @@ function EventListeners() {
         (event) => { Input_Filter(event, true); });
     INPUT_BIT_XOR_1.addEventListener('input', AddBit);
     INPUT_BIT_XOR_2.addEventListener('input', AddBit);
+    BUTTON_BIT_XOR.addEventListener('click', () => StartAnimation(((a, b) => a ^ b), 2, 'xor', 'bitXor'));
 
     INPUT_BIT_NOT.addEventListener('input', 
         (event) => { Input_Filter(event, true); });
     INPUT_BIT_NOT.addEventListener('input', AddBit);
+    BUTTON_BIT_NOT.addEventListener('click', StartAnimation_BitNot);
 
     INPUT_BIT_SHIFT_1.addEventListener('input', 
         (event) => { Input_Filter(event, true); });
     INPUT_BIT_SHIFT_1.addEventListener('input', AddBit);
     INPUT_BIT_SHIFT_2.addEventListener('input', 
         (event) => { Input_Filter(event, false, "char"); });
+    BUTTON_BIT_SHIFT.addEventListener('click', StartAnimation_BitShift);
 }
 
 function AddBit(event) {
@@ -581,52 +592,3 @@ function GetCanvaAndCtx(inputID) {
     if (inputID == "input_bitShift_1")
         return OUTPUT_CTX[4];
 }
-
-function DecToBin(decimalNumber) {
-    const BITS_IN_BYTE = 8;
-
-    let binaryResult = "";
-    let isNegative = decimalNumber < 0;
-    let absoluteNumber = Math.abs(decimalNumber);
-
-    if (isNegative) absoluteNumber -= 1;
-
-    for (let currentPower = 1; currentPower <= absoluteNumber; currentPower *= 2) {
-        if (absoluteNumber & currentPower) binaryResult += isNegative ? "0" : "1";
-        else binaryResult += isNegative ? "1" : "0";
-    }
-
-    let targetLength = Math.ceil((binaryResult.length+1) / BITS_IN_BYTE) * BITS_IN_BYTE - 1;
-    
-    for (let i = binaryResult.length; i < targetLength; i++)
-        binaryResult += isNegative ? "1" : "0";
-
-    binaryResult += isNegative ? "1" : "0";
-
-    return reverseString(binaryResult);
-}
-
-function Input_Filter(event, canBeNegative, type = "int") {
-    limits = {
-        "int": {"min": -2147483648, "max": 2147483647},
-        "short": {"min": -32768, "max": 32767},
-        "char": {"min": -128, "max": 127}
-    }
-
-    event.target.value = numberFilter(event.target.value, canBeNegative);
-    if (IsNumber(event.target.value))
-        event.target.value = clamp(parseInt(event.target.value), limits[type].min, limits[type].max);
-}
-
-function numberFilter(inputString, canBeNegative) { 
-    let cleaned = inputString.replace(/[^0-9-]/g, "").replace(/\s/g, '');
-    if (cleaned.includes("-")) {
-        let isNegative = cleaned.startsWith("-");
-        let onlyDigits = cleaned.replace(/-/g, "");
-        cleaned = (isNegative && canBeNegative ? "-" : "") + onlyDigits;
-    }
-    return cleaned;
-}
-function IsNumber     (value)         { return !(value.length == 0 || (value.length == 1 && value == "-")); }
-function reverseString(string)        { return string.split("").reverse().join(""); }
-function clamp        (val, min, max) { return Math.min(Math.max(val, min), max); }

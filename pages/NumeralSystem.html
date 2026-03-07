@@ -59,7 +59,7 @@
                         <div>
                             <input id="input_decimalNumberAddition_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_decimalNumberAddition_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_Addition" type="button" onclick="StartAnimation_Addition()"> Додати </button> <br>
+                            <button id="button_Addition" type="button"> Додати </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="additionAnimation" width="1010" height="135"></canvas>
                             </div>
@@ -72,7 +72,7 @@
                         <div>
                             <input id="input_decimalNumberSubtraction_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_decimalNumberSubtraction_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_Subtraction" type="button" onclick="StartAnimation_Subtraction()"> Відняти </button> <br>
+                            <button id="button_Subtraction" type="button"> Відняти </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="subtractionAnimation" width="1010" height="105"></canvas>
                             </div>
@@ -86,7 +86,7 @@
                         <div>
                             <input id="input_decimalNumberMultiplication_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_decimalNumberMultiplication_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_Multiplication" type="button" onclick="StartAnimation_Multiplication()"> Перемножити </button> <br>
+                            <button id="button_Multiplication" type="button"> Перемножити </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="multiplicationAnimation" width="1010" height="75"></canvas>
                             </div>
@@ -100,7 +100,7 @@
                         <div>
                             <input id="input_decimalNumberDivision_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_decimalNumberDivision_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_Division" type="button" onclick="StartAnimation_Division()"> Поділити </button> <br>
+                            <button id="button_Division" type="button"> Поділити </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="divisionAnimation" width="1010" height="85"></canvas>
                             </div>
@@ -134,7 +134,7 @@
                         <div>
                             <input id="input_floatNumber" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <div class="canvasContainer">
-                                <canvas id="output_floatNumber" width="980" height="45"></canvas>
+                                <canvas id="output_floatNumber" width="975" height="45"></canvas>
                             </div>
                         </div>
                         <p> ( Синій - знаковий біт; жовтий - біти порядка; зелений - біти мантіси ). </p>
@@ -158,6 +158,6 @@
         </footer>
         
         <script src="../js/canvasOperations.js"></script>
-        <script src="../js/pagesJS/NumeralSystem.js"></script>
+        <script type="module" src="../js/pagesJS/NumeralSystem.js"></script>
     </body>
 </html>

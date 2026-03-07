@@ -53,7 +53,7 @@
                         <div id="interaction">
                             <input id="input_bitOr_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_bitOr_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_bitOr" type="button" onclick="StartAnimation(((a, b) => a | b), 0, 'or', 'bitOr')"> Почати анімацію </button> <br>
+                            <button id="button_bitOr" type="button"> Почати анімацію </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_bitOr" width="1010" height="105"></canvas>
                             </div>
@@ -79,7 +79,7 @@
                         <div id="interaction">
                             <input id="input_bitAnd_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_bitAnd_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_bitAnd" type="button" onclick="StartAnimation(((a, b) => a & b), 1, 'and', 'bitAnd')"> Почати анімацію </button> <br>
+                            <button id="button_bitAnd" type="button"> Почати анімацію </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_bitAnd" width="1030" height="105"></canvas>
                             </div>
@@ -105,7 +105,7 @@
                         <div id="interaction">
                             <input id="input_bitXor_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_bitXor_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_bitXor" type="button" onclick="StartAnimation(((a, b) => a ^ b), 2, 'xor', 'bitXor')"> Почати анімацію </button> <br>
+                            <button id="button_bitXor" type="button"> Почати анімацію </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_bitXor" width="1030" height="105"></canvas>
                             </div>
@@ -127,7 +127,7 @@
                         </table>
                         <div id="interaction">
                             <input id="input_bitNot" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_bitNot" type="button" onclick="StartAnimation_BitNot()"> Почати анімацію </button> <br>
+                            <button id="button_bitNot" type="button"> Почати анімацію </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_bitNot" width="1018" height="75"></canvas>
                             </div>
@@ -144,7 +144,7 @@
                                 <option value="right">Вправо</option>
                                 <option value="left">Вліво</option>
                             </select>
-                            <button id="button_bitShift" type="button" onclick="StartAnimation_BitShift()"> Почати анімацію </button> <br>
+                            <button id="button_bitShift" type="button"> Почати анімацію </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_bitShift" width="1018" height="75"></canvas>
                             </div>
@@ -158,6 +158,6 @@
         </footer>
         
         <script src="../js/canvasOperations.js"></script>
-        <script src="../js/pagesJS/BinaryOperation.js"></script>
+        <script type="module" src="../js/pagesJS/BinaryOperation.js"></script>
     </body>
 </html>
