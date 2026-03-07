@@ -5,7 +5,7 @@ function LoadPage(pagePath) {
 async function MakePageButtons(path) {
     const CURRENT_PAGE = window.location.pathname.split("/").pop();
     if (CURRENT_PAGE !== "index.html" && CURRENT_PAGE !== "")
-        path = path.replace(/^.*[\\/]Pages[\\/]/, "");
+        path = path.replace(/^.*[\\/]pages[\\/]/, "");
     const JSON_FILE = await fetch(path);
     const DATA = await JSON_FILE.json();
     const NAVIGATION = document.getElementsByTagName('nav')[0];
@@ -15,7 +15,7 @@ async function MakePageButtons(path) {
         newButton.textContent = currElement.title; 
         let currentPathToPage = currElement.path;
         if (CURRENT_PAGE !== "index.html" && CURRENT_PAGE !== "")
-            currentPathToPage = currentPathToPage.replace(/^Pages[\\/]/, "");
+            currentPathToPage = currentPathToPage.replace(/^pages[\\/]/, "");
         newButton.onclick = () => LoadPage(currentPathToPage);
         newButton.type = "button";
 
@@ -28,6 +28,6 @@ let currentPath = "pages.json";
 const CURRENT_PAGE = window.location.pathname.split("/").pop();
 
 if (CURRENT_PAGE === "index.html" || CURRENT_PAGE === "")
-    currentPath = "Pages/pages.json";
+    currentPath = "pages/pages.json";
 
 MakePageButtons(currentPath);
