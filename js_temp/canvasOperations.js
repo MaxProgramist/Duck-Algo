@@ -1,0 +1,242 @@
+function ClearCanvasWithTransforms(ctx, canvas, color, radius=15) {
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    RoundedRect(ctx, new Point(0, 0), canvas.width, canvas.height, radius, color, false);
+    ctx.restore();
+}
+
+function DrawText(ctx, text, point, fontSize = 30, font = "'Exo 2'") {
+    ctx.font = `${fontSize}px ${font}, sans-serif`;
+    ctx.fillText(text, point.x, point.y);
+}
+
+function RoundedRect(ctx, point, width, height, radius, color, useStroke = true, glowing = false, glowIntensity = 5) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(point.x, point.y + radius);
+    ctx.arcTo(point.x, point.y + height, point.x + radius, point.y + height, radius);
+    ctx.arcTo(point.x + width, point.y + height, point.x + width, point.y + height - radius, radius);
+    ctx.arcTo(point.x + width, point.y, point.x + width - radius, point.y, radius);
+    ctx.arcTo(point.x, point.y, point.x, point.y + radius, radius);
+
+    if (glowing) {
+        ctx.shadowBlur = glowIntensity;
+        ctx.shadowColor = color;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+    }
+    ctx.fill();
+
+    if (useStroke) ctx.stroke();
+}
+
+function GlowingLine(ctx, startX, startY, endX, endY, lineWidth = 5, color, glowing = false, glowIntensity = 5) {
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = "round";
+
+    if (glowing) {
+        ctx.shadowBlur = glowIntensity;
+        ctx.shadowColor = color;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+    }
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.stroke();
+
+    ctx.shadowBlur = 0;
+}
+
+function GetCSSColor(colorTag) {
+    const rootElement = document.documentElement;
+    const computedStyle = getComputedStyle(rootElement);
+    
+    const mainColor = computedStyle.getPropertyValue(colorTag).trim();
+    
+    return mainColor;
+}
+
+const ScrollToRight = (element) => {
+    element.scrollLeft = element.scrollWidth;
+};
+
+function EaseOutCubic(x) {
+    return 1 - Math.pow(1 - x, 3);
+}    
+
+class Point {
+    constructor(x, y) {
+        this.xValue = x;
+        this.yValue = y;
+    }
+
+    get x() { return this.xValue; }
+    get y() { return this.yValue; } 
+    set x(newX) { this.xValue = newX; }
+    set y(nexY) { this.yValue = nexY; } 
+
+    get clone() { return new Point(this.xValue, this.yValue); }
+}
+
+class BitBox {
+    constructor(ctx, point, width, height, radius, color, text, glowing = false, glowingIntensity = 5) {
+        this.ctx = ctx;
+
+        this.point = point;
+
+        this.width = width;
+        this.height = height;
+        this.radius = radius;
+
+        this.color = color;
+        this.glowing = glowing;
+        this.glowingIntensity = glowingIntensity;
+
+        this.text = text;
+        this.nextText = text;
+        this.fontSize = this.#FontSize();
+
+        this.isAppearing = false;
+        this.isChanging = false;
+        this.isDeleting = false;
+
+        this.shouldChangeText = false;
+        this.startTime = 0;
+        this.animationDuration = 500;
+        this.currentScale = 0;
+
+        this.deleted = false;
+    }
+
+    changeText(nextText, timeMs = 500) {
+        this.nextText = nextText;
+        this.isChanging = true;
+        this.isAppearing = false;
+        this.isDeleting = false;
+        this.shouldChangeText = true;
+        this.animationDuration = timeMs;
+        this.startTime = performance.now();
+    }
+
+    startAppear(timeMs = 500) {
+        this.isAppearing = true;
+        this.animationDuration = timeMs;
+        this.startTime = performance.now();
+    }
+
+    startDelete(timeMs = 500) {
+        this.isDeleting = true;
+        this.animationDuration = timeMs;
+        this.startTime = performance.now();
+        this.text = this.nextText;
+    }
+
+    update(currentTime) {
+        if (this.isDeleting)  return this.#DeletingAnimation(currentTime);
+        if (this.isAppearing) return this.#AppearingAnimation(currentTime);
+        if (this.isChanging)  return this.#ChangingAnimation(currentTime);
+    }
+
+    #AppearingAnimation(currentTime) {
+        let elapsed = currentTime - this.startTime;
+        let progress = Math.min(elapsed / this.animationDuration, 1);
+
+        const EaseOutBack = (x) => {
+            const C1 = 1.70158;
+            const C3 = C1 + 1;
+            return 1 + C3 * Math.pow(x - 1, 3) + C1 * Math.pow(x - 1, 2);
+        };
+
+        this.currentScale = EaseOutBack(progress);
+
+        if (progress >= 1) {
+            this.isAppearing = false;
+            this.currentScale = 1;
+        }
+    }
+
+    #ChangingAnimation(currentTime) {
+        let elapsed = currentTime - this.startTime;
+        let progress = Math.min(elapsed / this.animationDuration, 1);
+
+        const EaseOutBack = (x) => {
+            const C1 = 1.70158;
+            const C3 = C1 + 1;
+            return 1 + C3 * Math.pow(x - 1, 3) + C1 * Math.pow(x - 1, 2);
+        };
+
+        if (progress < 0.5) {
+            let phaseProgress = progress * 2; 
+            this.currentScale = Math.max(0, 1 - EaseOutBack(phaseProgress) * 0.5); 
+            this.currentScale = 1 - Math.sin(phaseProgress * Math.PI / 2);
+        } else {
+            if (this.shouldChangeText) {
+                this.text = this.nextText;
+                this.fontSize = this.#FontSize();
+
+                this.shouldChangeText = false; 
+            }
+
+            let phaseProgress = (progress - 0.5) * 2;
+            this.currentScale = EaseOutBack(phaseProgress);
+        }
+
+        if (progress >= 1) {
+            this.currentScale = 1;
+            this.isChanging = false;
+        }
+    }
+
+    #DeletingAnimation(currentTime) {
+        let elapsed = currentTime - this.startTime;
+        let progress = Math.min(elapsed / this.animationDuration, 1);
+
+        const EASE_OUT_BACK = (x) => {
+            const C1 = 1.70158;
+            const C3 = C1 + 1;
+            return 1 + C3 * Math.pow(x - 1, 3) + C1 * Math.pow(x - 1, 2);
+        };
+
+        this.currentScale = Math.max(0, EASE_OUT_BACK(1 - progress));
+
+        if (progress >= 1) {
+            this.isDeleting = false;
+            this.currentScale = 0;
+            this.deleted = true;
+        }
+    }
+
+    #FontSize() {
+        return Math.min((this.width - 5) / ((this.text.length/2) || 1), this.height * 0.8);
+    }
+
+    draw() {
+        this.ctx.save();
+
+        this.ctx.translate(this.point.x + this.width/2, this.point.y + this.height/2);
+        this.ctx.scale(1, this.currentScale);
+
+        let posToDraw = new Point(-this.width/2, -this.height/2);
+
+        RoundedRect(this.ctx, posToDraw, this.width, this.height, this.radius, this.color, !this.glowing, this.glowing, this.glowingIntensity);
+
+        this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
+        this.ctx.fillStyle = "#000000";
+
+        DrawText(this.ctx, this.text, new Point(0, 0), this.fontSize);
+
+        this.ctx.restore();
+    }
+
+    get getNextText() {return this.nextText; }
+    get canDelete() { return this.deleted; }
+    get getText() { return this.text; }
+    get isDeletingAnimation() { return this.isDeleting; }
+    get position() { return this.point; }
+    get getCTX() { return this.ctx; }
+    set position(point) { this.point = point; }
+}
