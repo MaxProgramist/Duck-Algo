@@ -823,7 +823,8 @@ function StartAnimation_Division() {
     let hilight_witdh = BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset*2;
     let hilight_height = BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset*2;
 
-    let divisionBox_point = new Point(OUTPUT_DIVISION.width - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset)*16 - BIT_BOX_PARAM.offset * 3, BIT_BOX_PARAM.offset*2);
+    let lenOfNumbers = Math.max(animationState.division.bits.number_1.length, 8) + Math.max(animationState.division.bits.number_2.length, 8);
+    let divisionBox_point = new Point(OUTPUT_DIVISION.width - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset)*lenOfNumbers - BIT_BOX_PARAM.offset * 3, BIT_BOX_PARAM.offset*2);
 
     animationState.division.hilight.object = new BitBox(OUTPUT_DIVISION_CTX, divisionBox_point, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, 15);
     animationState.division.hilight.object.startAppear(TIME_TO_APEAR);
@@ -928,7 +929,8 @@ function Animate(currentTime, repeat = true) {
 }
 
 function DrawLine() {
-    let lineX = OUTPUT_DIVISION.width - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset)*8 - BIT_BOX_PARAM.offset * 2;
+    let lenOfNumbers = Math.max(animationState.division.bits.number_2.length, 8);
+    let lineX = OUTPUT_DIVISION.width - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset)*lenOfNumbers - BIT_BOX_PARAM.offset * 2;
     let lineXLen = (BIT_BOX_PARAM.offset + BIT_BOX_PARAM.width) * Math.max(animationState.division.bits.number_2.length, 8);
 
     let offSetLine_1 = lineXLen * animationState.division.lineRenderPercent;
@@ -1039,7 +1041,8 @@ function AddBit(event) {
 
 function GetCurrentSettings(inputID, canva, listLen, binNumberLen) {
     if (inputID == "input_decimalNumberDivision_1" || inputID == "input_decimalNumberDivision_2") {
-        let currentPoint = new Point(OUTPUT_DIVISION.width - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset)*16 - BIT_BOX_PARAM.offset*2,
+        let lenOfNumbers = Math.max(animationState.division.bits.number_1.length, 8) + Math.max(animationState.division.bits.number_2.length, 8);
+        let currentPoint = new Point(OUTPUT_DIVISION.width - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset)*lenOfNumbers - BIT_BOX_PARAM.offset*2,
             BIT_BOX_PARAM.offset*3);
 
         if (inputID == "input_decimalNumberDivision_2")
