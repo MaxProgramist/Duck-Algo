@@ -78,6 +78,8 @@ const MOVING_BOX_SPEED = -2;
 const LINE_RENDER_SPEED = 0.125;
 const TIME_TO_STOP = 15;
 
+let isChangingCanvaSize = 0;
+
 let animationState = {
     "decToBin": {
         "bits": {
@@ -135,7 +137,6 @@ let animationState = {
     "multiplication" : {
         "isPlaying": false,
         "bits": {
-            "numbers": [],
             "additional": [],
             "number_1": [],
             "number_2": []
@@ -281,7 +282,7 @@ function Addition() {
     if (animationState.addition.hilight.isMoving) {
         if (animationState.addition.timeStoper < TIME_TO_STOP) {
             animationState.addition.timeStoper++;
-            return requestAnimationFrame(Addition);
+            return;
         }
 
         current_boxPosition.x += MOVING_BOX_SPEED;
@@ -331,8 +332,6 @@ function Addition() {
         animationState.addition.hilight.stop_x -= BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset;
         animationState.addition.index++;
     }
-
-    if (animationState.addition.isPlaying) requestAnimationFrame(Addition);
 }
 
 function StartAnimation_Addition() {
@@ -365,8 +364,6 @@ function StartAnimation_Addition() {
     animationState.addition.index = 0;
     animationState.addition.imaginary.object = null;
     animationState.addition.timeStoper = 0;
-
-    requestAnimationFrame(Addition);
 }
 
 function Subtraction() {
@@ -429,7 +426,7 @@ function Subtraction() {
     } else if (animationState.subtraction.hilight.isMoving) {
         if (animationState.subtraction.timeStoper < TIME_TO_STOP) {
             animationState.subtraction.timeStoper++;
-            return requestAnimationFrame(Subtraction);
+            return;
         }
         
         current_boxPosition.x += MOVING_BOX_SPEED;
@@ -489,8 +486,6 @@ function Subtraction() {
         animationState.subtraction.index++;
         animationState.subtraction.hilight.stop_x -= BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset;
     }
-
-    if (animationState.subtraction.isPlaying) requestAnimationFrame(Subtraction);
 }
 
 function StartAnimation_Subtraction() {
@@ -526,8 +521,6 @@ function StartAnimation_Subtraction() {
     animationState.subtraction.index = 0;
     animationState.subtraction.hilight.stop_x = subtractionBox_point.x;
     animationState.subtraction.hilight.end_x = subtractionBox_point.x - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * ( Math.max(animationState.subtraction.bits.number_1.length, animationState.subtraction.bits.number_2.length) - 1 );
-
-    requestAnimationFrame(Subtraction);
 }
 
 function Multiplication() {
@@ -560,7 +553,7 @@ function Multiplication() {
             animationState.multiplication.isAdding = true;
 
             let hilight_witdh = BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset * 2;
-            let hilight_height = (BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset) * animationState.multiplication.bits.numbers.length + BIT_BOX_PARAM.offset;
+            let hilight_height = (BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset) * animationState.multiplication.bits.number_1.length + BIT_BOX_PARAM.offset;
 
             let animationBox_point = new Point(OUTPUT_MULTIPLICATION.width - BIT_BOX_PARAM.width - BIT_BOX_PARAM.offset*3, BIT_BOX_PARAM.height*2 + BIT_BOX_PARAM.offset*3);
 
@@ -598,7 +591,7 @@ function Multiplication() {
         current_boxPosition = animationState.multiplication.hilight_addition.object.position;
 
         if (animationState.multiplication.hilight_addition.isMoving) {
-            current_boxPosition.x += MOVING_BOX_SPEED*2;
+            current_boxPosition.x += MOVING_BOX_SPEED;
     
             if (current_boxPosition.x <= animationState.multiplication.hilight_addition.stop_x) {
                 animationState.multiplication.hilight_addition.isMoving = false;
@@ -610,9 +603,17 @@ function Multiplication() {
             }
         } else {
             let currAns = parseInt(animationState.multiplication.addingImaginary);
-            for (let currTempNumber = 0; currTempNumber <= Math.min(animationState.multiplication.indexAddition, 7); currTempNumber++) {
-                let currIndex = animationState.multiplication.indexAddition - currTempNumber;
-                let number = IsOutOfBounds(currIndex, animationState.multiplication.bits.numbers[currTempNumber]);
+            let currentGetInd = 2 + animationState.multiplication.indexAddition + (animationState.multiplication.indexAddition == 0);
+            let skipNumbers = animationState.multiplication.indexAddition <= animationState.multiplication.bits.number_1.length - 1 ? 0 : animationState.multiplication.indexAddition - animationState.multiplication.bits.number_1.length + 1;
+            for (let currTempNumber = 0; currTempNumber <= Math.min(animationState.multiplication.indexAddition, animationState.multiplication.bits.number_1.length - 1); currTempNumber++) {
+                let number = 0;
+
+                if (skipNumbers <= 0 && currTempNumber < animationState.multiplication.bits.number_2.length)
+                    number = animationState.multiplication.bits.additional[currentGetInd].getText;
+                
+                currentGetInd += animationState.multiplication.bits.number_1.length - 1;
+
+                if (skipNumbers > 0) skipNumbers--;
 
                 currAns += parseInt(number);
             }
@@ -627,7 +628,7 @@ function Multiplication() {
             ansBox.startAppear(TIME_TO_APEAR);
             animationState.multiplication.bits.additional.push(ansBox);
 
-            animationState.multiplication.addingImaginary = Math.max(currAns / 2, 0);
+            animationState.multiplication.addingImaginary = Math.floor(currAns / 2);
             animationState.multiplication.indexAddition++;
             animationState.multiplication.hilight_addition.stop_x -= BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset;
             animationState.multiplication.hilight_addition.isMoving = true;
@@ -649,14 +650,11 @@ function Multiplication() {
         let tempAnsBox = new BitBox(OUTPUT_MULTIPLICATION_CTX, tempAns_point, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--imaginary-color'), ans.toString(), true, 15);
         tempAnsBox.startAppear(TIME_TO_APEAR);
         animationState.multiplication.bits.additional.push(tempAnsBox);
-        animationState.multiplication.bits.numbers[animationState.multiplication.indexNumber_2].push(tempAnsBox);
 
         animationState.multiplication.indexNumber_1++;
         animationState.multiplication.hilight_1.stop_x -= BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset;
         animationState.multiplication.hilight_1.isMoving = true;
     }
-
-    if (animationState.multiplication.isPlaying) requestAnimationFrame(Multiplication);
 }
 
 function StartAnimation_Multiplication() {
@@ -688,11 +686,8 @@ function StartAnimation_Multiplication() {
     animation_multiplication_sign.startAppear(TIME_TO_APEAR);
     animationState.multiplication.bits.additional.push(animation_multiplication_sign);
 
-    CanvasResize(OUTPUT_MULTIPLICATION, 1010, (animationState.multiplication.bits.number_2.length + 3) * (BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset) + BIT_BOX_PARAM.offset*3);
-
-    animationState.multiplication.bits.numbers = [];
-    for (let i = 0; i<animationState.multiplication.bits.number_2.length; i++)
-        animationState.multiplication.bits.numbers.push([]);
+    let windowHeight = (animationState.multiplication.bits.number_2.length + 3) * (BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset) + BIT_BOX_PARAM.offset*3
+    CanvasResize(OUTPUT_MULTIPLICATION, 1010, windowHeight);
 
     animationState.multiplication.isPlaying = true;
     animationState.multiplication.hilight_1.isMoving = false;
@@ -708,8 +703,6 @@ function StartAnimation_Multiplication() {
     animationState.multiplication.hilight_1.end_x = muliplicationBox_point.x - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * ( animationState.multiplication.bits.number_1.length - 1 );
     animationState.multiplication.hilight_2.stop_x = muliplicationBox_point.x;
     animationState.multiplication.hilight_2.end_x = muliplicationBox_point.x - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * ( animationState.multiplication.bits.number_2.length - 1 );
-
-    requestAnimationFrame(Multiplication);
 }
 
 function Division() {
@@ -718,7 +711,7 @@ function Division() {
     if (animationState.division.hilight.isMoving) {
         if (animationState.division.timeStoper < TIME_TO_STOP) {
             animationState.division.timeStoper++;
-            return requestAnimationFrame(Division);
+            return;
         }
 
         current_boxPosition.x += -MOVING_BOX_SPEED;
@@ -817,8 +810,6 @@ function Division() {
         animationState.division.index++;
         animationState.division.hilight.stop_x += BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset;
     }
-
-    if (animationState.division.isPlaying) requestAnimationFrame(Division);
 }
 
 function StartAnimation_Division() {
@@ -865,11 +856,16 @@ function StartAnimation_Division() {
     animationState.division.hilight.isMoving = false;
     animationState.division.hilight.stop_x = divisionBox_point.x;
     animationState.division.hilight.end_x = divisionBox_point.x + (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * animationState.division.bits.number_1.length;
-
-    requestAnimationFrame(Division);
 }
 
-function Animate(currentTime) {
+function Animate(currentTime, repeat = true) {
+    if (repeat && isChangingCanvaSize > 0) return requestAnimationFrame(Animate);
+
+    if (animationState.addition.isPlaying) Addition();
+    if (animationState.subtraction.isPlaying) Subtraction();
+    if (animationState.multiplication.isPlaying) Multiplication();
+    if (animationState.division.isPlaying) Division();
+
     for (let currentCanva of OUTPUT_CTX)
         if (currentCanva.visible)
             ClearCanvasWithTransforms(currentCanva.ctx, currentCanva.canva, GetCSSColor('--canva-color'));
@@ -918,7 +914,7 @@ function Animate(currentTime) {
         }
     }
 
-    if (animationState.division.bits.number_1.length | animationState.division.bits.number_2.length > 0) {
+    if (animationState.division.bits.number_1.length > 0 || animationState.division.bits.number_2.length > 0) {
         if (animationState.division.lineRenderPercent < 1)
             animationState.division.lineRenderPercent += LINE_RENDER_SPEED;
         else animationState.division.lineRenderPercent = 1;
@@ -926,9 +922,9 @@ function Animate(currentTime) {
         animationState.division.lineRenderPercent -= LINE_RENDER_SPEED;
     else animationState.division.lineRenderPercent = 0;
 
-    if (animationState.division.lineRenderPercent > 0) DrawLine();
+    if (animationState.division.lineRenderPercent > 0 && OUTPUT_CTX[5].visible) DrawLine();
 
-    requestAnimationFrame(Animate);
+    if (repeat) return requestAnimationFrame(Animate);
 }
 
 function DrawLine() {
@@ -976,9 +972,9 @@ function EventListeners() {
     BUTTON_SUBTRACTION.addEventListener('click', StartAnimation_Subtraction);
 
     INPUT_MULTIPLICATION_1.addEventListener('input', 
-        (event) => { Input_Filter(event, false, "char"); });
+        (event) => { Input_Filter(event, false, "short"); });
     INPUT_MULTIPLICATION_2.addEventListener('input', 
-        (event) => { Input_Filter(event, false, "char"); });
+        (event) => { Input_Filter(event, false, "short"); });
     INPUT_MULTIPLICATION_1.addEventListener('input', AddBit);
     INPUT_MULTIPLICATION_2.addEventListener('input', AddBit);
     BUTTON_MULTIPLICATION.addEventListener('click', StartAnimation_Multiplication);
@@ -1119,9 +1115,6 @@ function DeleteOperationResult(inputID) {
     else if ((inputID == "input_decimalNumberMultiplication_1" || inputID == "input_decimalNumberMultiplication_2")) {
         for (let currBox of animationState.multiplication.bits.additional)
             currBox.startDelete(TIME_TO_DISAPEAR);
-        for (let currBoxList of animationState.multiplication.bits.numbers)
-            for (let currBox of currBoxList)
-                currBox.startDelete(TIME_TO_DISAPEAR);
 
         if (OUTPUT_MULTIPLICATION.height != 75)
             CanvasResize(OUTPUT_MULTIPLICATION, 1010, 75);
@@ -1152,15 +1145,20 @@ function CanvasResize(canvasElement, width, height) {
     const START_HEIGHT = canvasElement.height;
     const DURATION = 750;
     let StartTime = null;
-    function Step(Timestamp) {
-        if (!StartTime) StartTime = Timestamp;
-        const Progress = Math.min((Timestamp - StartTime) / DURATION, 1);
+    
+    function Step(timestamp) {
+        if (!StartTime) StartTime = timestamp;
+        const Progress = Math.min((timestamp - StartTime) / DURATION, 1);
         canvasElement.width = START_WIDTH + (width - START_WIDTH) * EaseOutCubic(Progress);
         canvasElement.height = START_HEIGHT + (height - START_HEIGHT) * EaseOutCubic(Progress);
-        if (Progress < 1) requestAnimationFrame(Step);
+        Animate(timestamp, false);
+        
+        if (Progress < 1) return requestAnimationFrame(Step);
+        isChangingCanvaSize--;
     }
+
+    isChangingCanvaSize++;
     requestAnimationFrame(Step);
-    requestAnimationFrame(Animate);
 }
 
 function BitColor(indexOfBit) {

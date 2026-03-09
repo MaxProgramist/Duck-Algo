@@ -177,13 +177,13 @@ EventListeners();
 requestAnimationFrame(Animate);
 
 //* ---------- Functions ---------- *//
-function BitAnimation(AnsFunction, canvaAndCtx, animationName) {
+function BitAnimation(ansFunction, canvaAndCtx, animationName) {
     let current_boxPosition = animationState[animationName].hilight.object.position;
 
     if (animationState[animationName].hilight.isMoving) {
         if (animationState[animationName].timeStoper < TIME_TO_STOP) {
             animationState[animationName].timeStoper++;
-            return requestAnimationFrame(() => BitAnimation(AnsFunction, canvaAndCtx, animationName));
+            return;
         }
 
         current_boxPosition.x += MOVING_BOX_SPEED;
@@ -202,7 +202,7 @@ function BitAnimation(AnsFunction, canvaAndCtx, animationName) {
         let number_2_index = animationState[animationName].bits.number_2.length - 1 - animationState[animationName].index;
         let number_2 = IsOutOfBounds(number_2_index, animationState[animationName].bits.number_2);
 
-        let ans = AnsFunction(parseInt(number_1), parseInt(number_2));
+        let ans = ansFunction(parseInt(number_1), parseInt(number_2));
         let ansBox_point = new Point(animationState[animationName].hilight.stop_x + BIT_BOX_PARAM.offset, current_boxPosition.y + BIT_BOX_PARAM.height * 2 + BIT_BOX_PARAM.offset * 3);
 
         let ansBox = new BitBox(canvaAndCtx.ctx, ansBox_point, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), ans.toString(), true, 15);
@@ -214,11 +214,9 @@ function BitAnimation(AnsFunction, canvaAndCtx, animationName) {
         animationState[animationName].hilight.stop_x -= BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset;
         animationState[animationName].index++;
     }
-
-    if (animationState[animationName].isPlaying) requestAnimationFrame(() => BitAnimation(AnsFunction, canvaAndCtx,animationName));
 }
 
-function StartAnimation(ansFunction, canvaIndex, operationText, operationName) {
+function StartAnimation(canvaIndex, operationText, operationName) {
     if (animationState[operationName].bits.number_1.length <= 0 && animationState[operationName].bits.number_2.length <= 0) return;
     if (animationState[operationName].isPlaying) return;
 
@@ -251,8 +249,6 @@ function StartAnimation(ansFunction, canvaIndex, operationText, operationName) {
     animationState[operationName].hilight.end_x = bitOperationBox_point.x - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * ( Math.max(animationState[operationName].bits.number_1.length, animationState[operationName].bits.number_2.length) - 1 );
     animationState[operationName].index = 0;
     animationState[operationName].timeStoper = 0;
-
-    requestAnimationFrame(() => BitAnimation(ansFunction, OUTPUT_CTX[canvaIndex], operationName));
 }
 
 function BitNotAnimation() {
@@ -261,7 +257,7 @@ function BitNotAnimation() {
     if (animationState.bitNot.hilight.isMoving) {
         if (animationState.bitNot.timeStoper < TIME_TO_STOP) {
             animationState.bitNot.timeStoper++;
-            return requestAnimationFrame(BitNotAnimation);
+            return;
         }
 
         current_boxPosition.x += MOVING_BOX_SPEED;
@@ -290,8 +286,6 @@ function BitNotAnimation() {
         animationState.bitNot.hilight.stop_x -= BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset;
         animationState.bitNot.index++;
     }
-
-    if (animationState.bitNot.isPlaying) requestAnimationFrame(BitNotAnimation);
 }
 
 function StartAnimation_BitNot() {
@@ -322,8 +316,6 @@ function StartAnimation_BitNot() {
     animationState.bitNot.hilight.end_x = bitNotBox_point.x - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * (animationState.bitNot.bits.number.length - 1);
     animationState.bitNot.index = 0;
     animationState.bitNot.timeStoper = 0;
-
-    requestAnimationFrame(BitNotAnimation);
 }
 
 function BitShiftAnimation() {
@@ -332,7 +324,7 @@ function BitShiftAnimation() {
     if (animationState.bitShift.hilight.isMoving) {
         if (animationState.bitShift.timeStoper < TIME_TO_STOP) {
             animationState.bitShift.timeStoper++;
-            return requestAnimationFrame(BitShiftAnimation);
+            return;
         }
 
         current_boxPosition.x += MOVING_BOX_SPEED;
@@ -364,7 +356,6 @@ function BitShiftAnimation() {
         animationState.bitShift.index++;
     }
 
-    if (animationState.bitShift.isPlaying) requestAnimationFrame(BitShiftAnimation);
 }
 
 function StartAnimation_BitShift() {
@@ -409,11 +400,15 @@ function StartAnimation_BitShift() {
     animationState.bitShift.timeStoper = 0;
     animationState.bitShift.shiftNumber = bitShiftOffset;
     animationState.bitShift.direction = bitShiftOffsetDirection;
-
-    requestAnimationFrame(BitShiftAnimation);
 }
 
 function Animate(currentTime) {
+    if (animationState.bitOr.isPlaying) BitAnimation(((a, b) => a | b), OUTPUT_CTX[0], 'bitOr');
+    if (animationState.bitAnd.isPlaying) BitAnimation(((a, b) => a & b), OUTPUT_CTX[1], 'bitAnd');
+    if (animationState.bitXor.isPlaying) BitAnimation(((a, b) => a ^ b), OUTPUT_CTX[2], 'bitXor');
+    if (animationState.bitNot.isPlaying) BitNotAnimation();
+    if (animationState.bitShift.isPlaying) BitShiftAnimation();
+
     for (let currentCanva of OUTPUT_CTX)
         if (currentCanva.visible)
             ClearCanvasWithTransforms(currentCanva.ctx, currentCanva.canva, GetCSSColor('--canva-color'));
@@ -450,7 +445,7 @@ function EventListeners() {
         (event) => { Input_Filter(event, true); });
     INPUT_BIT_OR_1.addEventListener('input', AddBit);
     INPUT_BIT_OR_2.addEventListener('input', AddBit);
-    BUTTON_BIT_OR.addEventListener('click', () => StartAnimation(((a, b) => a | b), 0, 'or', 'bitOr'));
+    BUTTON_BIT_OR.addEventListener('click', () => StartAnimation(0, 'or', 'bitOr'));
 
     INPUT_BIT_AND_1.addEventListener('input', 
         (event) => { Input_Filter(event, true); });
@@ -458,7 +453,7 @@ function EventListeners() {
         (event) => { Input_Filter(event, true); });
     INPUT_BIT_AND_1.addEventListener('input', AddBit);
     INPUT_BIT_AND_2.addEventListener('input', AddBit);
-    BUTTON_BIT_AND.addEventListener('click', () => StartAnimation(((a, b) => a & b), 1, 'and', 'bitAnd'));
+    BUTTON_BIT_AND.addEventListener('click', () => StartAnimation(1, 'and', 'bitAnd'));
 
     INPUT_BIT_XOR_1.addEventListener('input', 
         (event) => { Input_Filter(event, true); });
@@ -466,7 +461,7 @@ function EventListeners() {
         (event) => { Input_Filter(event, true); });
     INPUT_BIT_XOR_1.addEventListener('input', AddBit);
     INPUT_BIT_XOR_2.addEventListener('input', AddBit);
-    BUTTON_BIT_XOR.addEventListener('click', () => StartAnimation(((a, b) => a ^ b), 2, 'xor', 'bitXor'));
+    BUTTON_BIT_XOR.addEventListener('click', () => StartAnimation(2, 'xor', 'bitXor'));
 
     INPUT_BIT_NOT.addEventListener('input', 
         (event) => { Input_Filter(event, true); });
