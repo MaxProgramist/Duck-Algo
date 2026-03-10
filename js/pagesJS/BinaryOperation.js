@@ -65,8 +65,8 @@ OUTPUT_CTX.forEach(Item => { CANVAS_OBSERVER.observe(Item.canva); });
 //* ------------ Other ------------ *//
 const BIT_BOX_PARAM = {width: 25, height: 25, offset: 5, glowIntensity: 15};
 
-const TIME_TO_APEAR = 500;
-const TIME_TO_DISAPEAR = 150;
+const TIME_TO_APPEAR = 500;
+const TIME_TO_DISAPPEAR = 150;
 
 const MOVING_BOX_SPEED = -2;
 const TIME_TO_STOP = 15;
@@ -194,7 +194,7 @@ function BitAnimation(ansFunction, canvaAndCtx, animationName) {
             animationState[animationName].hilight.isMoving = false;
             current_boxPosition.x = animationState[animationName].hilight.stop_x;
         } else if (animationState[animationName].hilight.stop_x < animationState[animationName].hilight.end_x) {
-            animationState[animationName].hilight.object.startDelete(TIME_TO_DISAPEAR);
+            animationState[animationName].hilight.object.startDelete(TIME_TO_DISAPPEAR);
             animationState[animationName].isPlaying = false;
 
             let inputToLock = {input_1: null, input_2: null};
@@ -223,7 +223,7 @@ function BitAnimation(ansFunction, canvaAndCtx, animationName) {
         let ansBox_point = new Point(animationState[animationName].hilight.stop_x + BIT_BOX_PARAM.offset, current_boxPosition.y + BIT_BOX_PARAM.height * 2 + BIT_BOX_PARAM.offset * 3);
 
         let ansBox = new BitBox(canvaAndCtx.ctx, ansBox_point, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), ans.toString(), true, BIT_BOX_PARAM.glowIntensity);
-        ansBox.startAppear(TIME_TO_APEAR);
+        ansBox.startAppear(TIME_TO_APPEAR);
         animationState[animationName].bits.additional.push(ansBox);
 
         animationState[animationName].hilight.isMoving = true;
@@ -262,7 +262,7 @@ function StartAnimation(canvaIndex, operationText, operationName) {
     let bitOperationBox_point = new Point(CURRENT_CANVA_CTX.canva.width - BIT_BOX_PARAM.width - BIT_BOX_PARAM.offset * 3, BIT_BOX_PARAM.offset);
 
     animationState[operationName].hilight.object = new BitBox(CURRENT_CANVA_CTX.ctx, bitOperationBox_point, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, BIT_BOX_PARAM.glowIntensity);
-    animationState[operationName].hilight.object.startAppear(TIME_TO_APEAR);
+    animationState[operationName].hilight.object.startAppear(TIME_TO_APPEAR);
     animationState[operationName].bits.additional.push(animationState[operationName].hilight.object);
 
     const BIT_OR_SCALE = 1.35, OTHER_BIT_SCALE = 2;
@@ -273,7 +273,7 @@ function StartAnimation(canvaIndex, operationText, operationName) {
         BIT_BOX_PARAM.height*0.5 + BIT_BOX_PARAM.offset*2.5);
 
     let animation_bit_sign = new BitBox(CURRENT_CANVA_CTX.ctx, ansBox_point, BIT_BOX_PARAM.width*scale, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), operationText, true, BIT_BOX_PARAM.glowIntensity);
-    animation_bit_sign.startAppear(TIME_TO_APEAR);
+    animation_bit_sign.startAppear(TIME_TO_APPEAR);
     animationState[operationName].bits.additional.push(animation_bit_sign);
 
     animationState[operationName].isPlaying = true;
@@ -299,7 +299,7 @@ function BitNotAnimation() {
             animationState.bitNot.hilight.isMoving = false;
             current_boxPosition.x = animationState.bitNot.hilight.stop_x;
         } else if (animationState.bitNot.hilight.stop_x < animationState.bitNot.hilight.end_x) {
-            animationState.bitNot.hilight.object.startDelete(TIME_TO_DISAPEAR);
+            animationState.bitNot.hilight.object.startDelete(TIME_TO_DISAPPEAR);
             animationState.bitNot.isPlaying = false;
 
             INPUT_BIT_NOT.readOnly = false;
@@ -313,7 +313,7 @@ function BitNotAnimation() {
         let ansBox_point = new Point(animationState.bitNot.hilight.stop_x + BIT_BOX_PARAM.offset, current_boxPosition.y + BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset * 2);
 
         let ansBox = new BitBox(OUTPUT_BIT_NOT_CTX, ansBox_point, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), ans.toString(), true, BIT_BOX_PARAM.glowIntensity);
-        ansBox.startAppear(TIME_TO_APEAR);
+        ansBox.startAppear(TIME_TO_APPEAR);
         animationState.bitNot.bits.additional.push(ansBox);
 
         animationState.bitNot.hilight.isMoving = true;
@@ -337,14 +337,14 @@ function StartAnimation_BitNot() {
     let bitNotBox_point = new Point(OUTPUT_BIT_NOT.width - BIT_BOX_PARAM.width - BIT_BOX_PARAM.offset * 3, BIT_BOX_PARAM.offset);
 
     animationState.bitNot.hilight.object = new BitBox(OUTPUT_BIT_NOT_CTX, bitNotBox_point, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, BIT_BOX_PARAM.glowIntensity);
-    animationState.bitNot.hilight.object.startAppear(TIME_TO_APEAR);
+    animationState.bitNot.hilight.object.startAppear(TIME_TO_APPEAR);
     animationState.bitNot.bits.additional.push(animationState.bitNot.hilight.object);
 
     let countOfNumbers = animationState.bitNot.bits.number.length;
     let ansBox_point = new Point(OUTPUT_BIT_NOT.width - BIT_BOX_PARAM.width*1.5 - BIT_BOX_PARAM.offset * 2 - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * countOfNumbers, BIT_BOX_PARAM.offset*2);
 
     let animation_not_sign = new BitBox(OUTPUT_BIT_NOT_CTX, ansBox_point, BIT_BOX_PARAM.width*1.5, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "not", true, BIT_BOX_PARAM.glowIntensity);
-    animation_not_sign.startAppear(TIME_TO_APEAR);
+    animation_not_sign.startAppear(TIME_TO_APPEAR);
     animationState.bitNot.bits.additional.push(animation_not_sign);
 
     animationState.bitNot.isPlaying = true;
@@ -371,8 +371,8 @@ function BitShiftAnimation() {
             animationState.bitShift.hilight.isMoving = false;
             current_boxPosition.x = animationState.bitShift.hilight.stop_x;
         } else if (animationState.bitShift.hilight.stop_x < animationState.bitShift.hilight.end_x) {
-            animationState.bitShift.hilight.object.startDelete(TIME_TO_DISAPEAR);
-            animationState.bitShift.imaginary.object.startDelete(TIME_TO_DISAPEAR);
+            animationState.bitShift.hilight.object.startDelete(TIME_TO_DISAPPEAR);
+            animationState.bitShift.imaginary.object.startDelete(TIME_TO_DISAPPEAR);
             animationState.bitShift.isPlaying = false;
 
             INPUT_BIT_SHIFT_1.readOnly = false;
@@ -387,7 +387,7 @@ function BitShiftAnimation() {
         let ansBox_point = new Point(animationState.bitShift.hilight.stop_x + BIT_BOX_PARAM.offset, current_boxPosition.y + BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset * 2);
 
         let ansBox = new BitBox(OUTPUT_BIT_SHIFT_CTX, ansBox_point, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), ans.toString(), true, BIT_BOX_PARAM.glowIntensity);
-        ansBox.startAppear(TIME_TO_APEAR);
+        ansBox.startAppear(TIME_TO_APPEAR);
         animationState.bitShift.bits.additional.push(ansBox);
 
         animationState.bitShift.hilight.isMoving = true;
@@ -417,13 +417,13 @@ function StartAnimation_BitShift() {
     let bitShiftBox_point = new Point(OUTPUT_BIT_NOT.width - BIT_BOX_PARAM.width - BIT_BOX_PARAM.offset * 3, BIT_BOX_PARAM.offset);
 
     animationState.bitShift.hilight.object = new BitBox(OUTPUT_BIT_SHIFT_CTX, bitShiftBox_point.clone, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, BIT_BOX_PARAM.glowIntensity);
-    animationState.bitShift.hilight.object.startAppear(TIME_TO_APEAR);
+    animationState.bitShift.hilight.object.startAppear(TIME_TO_APPEAR);
     animationState.bitShift.bits.additional.push(animationState.bitShift.hilight.object);
 
     bitShiftBox_point.x += (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * bitShiftOffset * (bitShiftOffsetDirection == "right" ? -1 : 1);
 
     animationState.bitShift.imaginary.object = new BitBox(OUTPUT_BIT_SHIFT_CTX, bitShiftBox_point.clone, hilight_witdh, hilight_height, 6, GetCSSColor('--imaginary-color'), "", true, BIT_BOX_PARAM.glowIntensity);
-    animationState.bitShift.imaginary.object.startAppear(TIME_TO_APEAR);
+    animationState.bitShift.imaginary.object.startAppear(TIME_TO_APPEAR);
     animationState.bitShift.bits.additional.push(animationState.bitShift.imaginary.object);
 
     bitShiftBox_point.x -= (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * bitShiftOffset * (bitShiftOffsetDirection == "right" ? -1 : 1);
@@ -432,7 +432,7 @@ function StartAnimation_BitShift() {
     let ansBox_point = new Point(OUTPUT_BIT_NOT.width - BIT_BOX_PARAM.width*1.5 - BIT_BOX_PARAM.offset * 2 - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * countOfNumbers, BIT_BOX_PARAM.offset*2);
 
     let animation_shift_sign = new BitBox(OUTPUT_BIT_SHIFT_CTX, ansBox_point, BIT_BOX_PARAM.width*1.5, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "shift", true, BIT_BOX_PARAM.glowIntensity);
-    animation_shift_sign.startAppear(TIME_TO_APEAR);
+    animation_shift_sign.startAppear(TIME_TO_APPEAR);
     animationState.bitShift.bits.additional.push(animation_shift_sign);
 
     animationState.bitShift.isPlaying = true;
@@ -535,12 +535,12 @@ function AddBit(event) {
         for (let i = currentList.length; i<binNumber.length; i++) {
             let currentBit = binNumber[binNumber.length - i - 1];
             let currentBox = new BitBox(CANVA_AND_CTX.ctx, new Point(0, 0), BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), currentBit, true, BIT_BOX_PARAM.glowIntensity);
-            currentBox.startAppear(TIME_TO_APEAR);
+            currentBox.startAppear(TIME_TO_APPEAR);
             currentList.unshift(currentBox);
         }
     } else if (currentList.length > binNumber.length) {
         let lastInd = currentList.length - binNumber.length;
-        for (let i = 0; i<lastInd; i++) currentList[i].startDelete(TIME_TO_DISAPEAR);
+        for (let i = 0; i<lastInd; i++) currentList[i].startDelete(TIME_TO_DISAPPEAR);
     }
     
     let offset = (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * currentList.length + BIT_BOX_PARAM.offset;
@@ -592,19 +592,19 @@ function SecondNumber(inputID) {
 function DeleteOperationResult(inputID) {
     if (inputID == "input_bitOr_1" || inputID == "input_bitOr_2" || inputID == 0)
         for (let currBox of animationState.bitOr.bits.additional)
-            currBox.startDelete(TIME_TO_DISAPEAR);
+            currBox.startDelete(TIME_TO_DISAPPEAR);
     if (inputID == "input_bitAnd_1" || inputID == "input_bitAnd_2" || inputID == 1)
         for (let currBox of animationState.bitAnd.bits.additional)
-            currBox.startDelete(TIME_TO_DISAPEAR);
+            currBox.startDelete(TIME_TO_DISAPPEAR);
     if (inputID == "input_bitXor_1" || inputID == "input_bitXor_2" || inputID == 2)
         for (let currBox of animationState.bitXor.bits.additional)
-            currBox.startDelete(TIME_TO_DISAPEAR);
+            currBox.startDelete(TIME_TO_DISAPPEAR);
     if (inputID == "input_bitShift_1")
         for (let currBox of animationState.bitShift.bits.additional)
-            currBox.startDelete(TIME_TO_DISAPEAR);
+            currBox.startDelete(TIME_TO_DISAPPEAR);
     if (inputID == "input_bitNot")
         for (let currBox of animationState.bitNot.bits.additional)
-            currBox.startDelete(TIME_TO_DISAPEAR);
+            currBox.startDelete(TIME_TO_DISAPPEAR);
 }
 
 function GetCanvaAndCtx(inputID) {

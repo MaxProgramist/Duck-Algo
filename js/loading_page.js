@@ -5,3 +5,5 @@ function InitPageSettings() {
     pageBody.classList.remove("is-loading");
   });
 }
+
+InitPageSettings();
