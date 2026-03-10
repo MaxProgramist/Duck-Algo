@@ -3,23 +3,23 @@
     <head>
         <meta lang="ua">
 
-        <script src="..\\JS\loading_page.js"></script>
-        <script src="..\\JS\loadPage.js"></script>
+        <script src="../js/loading_page.js"></script>
+        <script src="../js/loadPage.js"></script>
 
-        <link rel="stylesheet" href="..\\CSS\style.css">
-        <link rel="stylesheet" href="..\\CSS\PagesCSS\BinaryOperation.css">
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../css/pagesCSS/BinaryOperation.css">
         <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;800&display=swap" rel="stylesheet">
         <title> Duck Algo - Binary Operation </title>
     </head>
     <body>
         <nav>
-            <button type="button" onclick="LoadPage(`..\\index.html`)"> Головна </button> <br>
+            <button type="button" onclick="LoadPage(`../index.html`)"> Головна </button> <br>
             Всі сторінки: <br>
         </nav>
         <main>
             <div>
                 <h1> Бітові операції </h1>
-                <div style="width: 100%;">
+                <div class="mainContent">
                     <div>
                         <h2> Вступ </h2>
                         <p> Так як комп’ютер вміє оперувати тільки 0 та 1, це відкриває можливість для деяких операцій, які не існують в десятковій системі числення, бо можна вважати, що <b>1 – правда</b> і <b>0 – хиба</b>. І тоді в нас є 6 операції: </p>
@@ -50,10 +50,10 @@
                             </tbody>
                         </table>
                         <p> Нижче ви можете переглянути, як відбувається побітове АБО з 2 числами. </p>
-                        <div id="interaction">
+                        <div>
                             <input id="input_bitOr_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_bitOr_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_bitOr" type="button" onclick="StartAnimation(((a, b) => a | b), 0, 'or', 'bitOr')"> Почати анімацію </button> <br>
+                            <button id="button_bitOr" type="button"> Почати анімацію </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_bitOr" width="1010" height="105"></canvas>
                             </div>
@@ -76,10 +76,10 @@
                             </tbody>
                         </table>
                         <p> Нижче ви можете переглянути, як відбувається побітове І з 2 числами. </p>
-                        <div id="interaction">
+                        <div>
                             <input id="input_bitAnd_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_bitAnd_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_bitAnd" type="button" onclick="StartAnimation(((a, b) => a & b), 1, 'and', 'bitAnd')"> Почати анімацію </button> <br>
+                            <button id="button_bitAnd" type="button"> Почати анімацію </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_bitAnd" width="1030" height="105"></canvas>
                             </div>
@@ -102,10 +102,10 @@
                             </tbody>
                         </table>
                         <p> Нижче ви можете переглянути, як відбувається побітове ВИКЛЮЧНЕ АБО з 2 числами. </p>
-                        <div id="interaction">
+                        <div>
                             <input id="input_bitXor_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_bitXor_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_bitXor" type="button" onclick="StartAnimation(((a, b) => a ^ b), 2, 'xor', 'bitXor')"> Почати анімацію </button> <br>
+                            <button id="button_bitXor" type="button"> Почати анімацію </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_bitXor" width="1030" height="105"></canvas>
                             </div>
@@ -125,9 +125,9 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div id="interaction">
+                        <div>
                             <input id="input_bitNot" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_bitNot" type="button" onclick="StartAnimation_BitNot()"> Почати анімацію </button> <br>
+                            <button id="button_bitNot" type="button"> Почати анімацію </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_bitNot" width="1018" height="75"></canvas>
                             </div>
@@ -137,14 +137,14 @@
                         <h2> Побітовий ЗСУВ ВПРАВО/ВЛІВО (BIT RIGHT/LEFT SHIFT) </h2>
                         <p> Ці дві операції працюють тільки над одним числом. Для реалізації цього зсуву  потрібні два числа: те, яке змінюємо (вхідне) та те, яке вказує на скільки бітів робимо зсув. <br> Побітовий зсув вправо та вліво зсуває біти числа, на якусь кількість позицій  вправо та вліво відповідно. </p>
                         <p> Нижче ви можете переглянути, як відбувається побітове ПОБІТОВИЙ ЗСУВ, і вибрати його напрямок у випадаючому списку. </p>
-                        <div id="interaction">
+                        <div>
                             <input id="input_bitShift_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_bitShift_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <select id="shiftDirection">
                                 <option value="right">Вправо</option>
                                 <option value="left">Вліво</option>
                             </select>
-                            <button id="button_bitShift" type="button" onclick="StartAnimation_BitShift()"> Почати анімацію </button> <br>
+                            <button id="button_bitShift" type="button"> Почати анімацію </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_bitShift" width="1018" height="75"></canvas>
                             </div>
@@ -157,7 +157,6 @@
             Made by DuckMim.
         </footer>
         
-        <script src="..\\JS\canvasOperations.js"></script>
-        <script src="..\\JS\PagesJS\BinaryOperation.js"></script>
+        <script type="module" src="../js/pagesJS/BinaryOperation.js"></script>
     </body>
 </html>

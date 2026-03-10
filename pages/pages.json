@@ -1,0 +1,6 @@
+{
+    "pages" : [
+        {"path":"pages/NumeralSystem.html", "title":"Системи числення"},
+        {"path":"pages/BinaryOperation.html", "title":"Бітові операції"}
+    ]
+}
