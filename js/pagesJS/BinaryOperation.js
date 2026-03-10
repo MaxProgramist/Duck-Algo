@@ -1,6 +1,8 @@
 import { DecToBin, Input_Filter, IsNumber } from '../utility.js'
+import { Point, BitBox, ClearCanvasWithTransforms, GetCSSColor, ScrollToRight } from '../canvasOperations.js'
 
 //* ---------- Variables ---------- *//
+
 //* -------- HTML Elements -------- *//
 const INPUT_BIT_OR_1 = document.getElementById('input_bitOr_1');
 const INPUT_BIT_OR_2 = document.getElementById('input_bitOr_2');
@@ -61,7 +63,7 @@ const CANVAS_OBSERVER = new IntersectionObserver(ObserverCallback, OBSERVER_SETT
 OUTPUT_CTX.forEach(Item => { CANVAS_OBSERVER.observe(Item.canva); });
 
 //* ------------ Other ------------ *//
-const BIT_BOX_PARAM = {width: 25, height: 25, offset: 5};
+const BIT_BOX_PARAM = {width: 25, height: 25, offset: 5, glowIntensity: 15};
 
 const TIME_TO_APEAR = 500;
 const TIME_TO_DISAPEAR = 150;
@@ -72,87 +74,87 @@ const TIME_TO_STOP = 15;
 const ANIMATION_NAMES = ["bitOr", "bitAnd", "bitXor", "bitNot", "bitShift"];
 
 let animationState = {
-    "bitOr": {
-        "isPlaying": false,
-        "bits": {
-            "additional": [],
-            "number_1": [],
-            "number_2": []
+    bitOr: {
+        isPlaying: false,
+        bits: {
+            additional: [],
+            number_1: [],
+            number_2: []
         },
-        "index": 0,
-        "timeStoper": 0,
-        "hilight":{
-            "object": null,
-            "isMoving": false,
-            "stop_x": false,
-            "end_x": false
+        index: 0,
+        timeStoper: 0,
+        hilight:{
+            object: null,
+            isMoving: false,
+            stop_x: false,
+            end_x: false
         }
     },
-    "bitAnd": {
-        "isPlaying": false,
-        "bits": {
-            "additional": [],
-            "number_1": [],
-            "number_2": []
+    bitAnd: {
+        isPlaying: false,
+        bits: {
+            additional: [],
+            number_1: [],
+            number_2: []
         },
-        "index": 0,
-        "timeStoper": 0,
-        "hilight":{
-            "object": null,
-            "isMoving": false,
-            "stop_x": false,
-            "end_x": false
+        index: 0,
+        timeStoper: 0,
+        hilight:{
+            object: null,
+            isMoving: false,
+            stop_x: false,
+            end_x: false
         }
     },
-    "bitXor": {
-        "isPlaying": false,
-        "bits": {
-            "additional": [],
-            "number_1": [],
-            "number_2": []
+    bitXor: {
+        isPlaying: false,
+        bits: {
+            additional: [],
+            number_1: [],
+            number_2: []
         },
-        "index": 0,
-        "timeStoper": 0,
-        "hilight":{
-            "object": null,
-            "isMoving": false,
-            "stop_x": false,
-            "end_x": false
+        index: 0,
+        timeStoper: 0,
+        hilight:{
+            object: null,
+            isMoving: false,
+            stop_x: false,
+            end_x: false
         }
     },
-    "bitNot": {
-        "isPlaying": false,
-        "bits": {
-            "additional": [],
-            "number": []
+    bitNot: {
+        isPlaying: false,
+        bits: {
+            additional: [],
+            number: []
         },
-        "index": 0,
-        "timeStoper": 0,
-        "hilight":{
-            "object": null,
-            "isMoving": false,
-            "stop_x": false,
-            "end_x": false
+        index: 0,
+        timeStoper: 0,
+        hilight:{
+            object: null,
+            isMoving: false,
+            stop_x: false,
+            end_x: false
         }
     },
-    "bitShift": {
-        "isPlaying": false,
-        "bits": {
-            "additional": [],
-            "number": []
+    bitShift: {
+        isPlaying: false,
+        bits: {
+            additional: [],
+            number: []
         },
-        "index": 0,
-        "shiftNumber": 0,
-        "direction": "none",
-        "timeStoper": 0,
-        "hilight": {
-            "object": null,
-            "isMoving": false,
-            "stop_x": false,
-            "end_x": false
+        index: 0,
+        shiftNumber: 0,
+        direction: "none",
+        timeStoper: 0,
+        hilight: {
+            object: null,
+            isMoving: false,
+            stop_x: false,
+            end_x: false
         },
-        "imaginary": {
-            "object": null
+        imaginary: {
+            object: null
         }
     }
 };
@@ -170,7 +172,7 @@ CELLS.forEach(cell => {
         cell.style.fontWeight = 'bold';
         cell.style.boxShadow = '0 0 10px '
     }
-    cell.style.boxShadow = `0 0 15px ${cell.style.backgroundColor}`;
+    cell.style.boxShadow = `0 0 ${BIT_BOX_PARAM.glowIntensity}px ${cell.style.backgroundColor}`;
 });
 
 EventListeners();
@@ -194,6 +196,21 @@ function BitAnimation(ansFunction, canvaAndCtx, animationName) {
         } else if (animationState[animationName].hilight.stop_x < animationState[animationName].hilight.end_x) {
             animationState[animationName].hilight.object.startDelete(TIME_TO_DISAPEAR);
             animationState[animationName].isPlaying = false;
+
+            let inputToLock = {input_1: null, input_2: null};
+            if (animationName == "bitOr") {
+                inputToLock.input_1 = INPUT_BIT_OR_1;
+                inputToLock.input_2 = INPUT_BIT_OR_2;
+            } else if (animationName == "bitAnd") {
+                inputToLock.input_1 = INPUT_BIT_AND_1;
+                inputToLock.input_2 = INPUT_BIT_AND_2;
+            } else if (animationName == "bitXor") {
+                inputToLock.input_1 = INPUT_BIT_XOR_1;
+                inputToLock.input_2 = INPUT_BIT_XOR_2;
+            }
+        
+            inputToLock.input_1.readOnly = false;
+            inputToLock.input_2.readOnly = false;
         }
     } else {
         let number_1_index = animationState[animationName].bits.number_1.length - 1 - animationState[animationName].index;
@@ -205,7 +222,7 @@ function BitAnimation(ansFunction, canvaAndCtx, animationName) {
         let ans = ansFunction(parseInt(number_1), parseInt(number_2));
         let ansBox_point = new Point(animationState[animationName].hilight.stop_x + BIT_BOX_PARAM.offset, current_boxPosition.y + BIT_BOX_PARAM.height * 2 + BIT_BOX_PARAM.offset * 3);
 
-        let ansBox = new BitBox(canvaAndCtx.ctx, ansBox_point, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), ans.toString(), true, 15);
+        let ansBox = new BitBox(canvaAndCtx.ctx, ansBox_point, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), ans.toString(), true, BIT_BOX_PARAM.glowIntensity);
         ansBox.startAppear(TIME_TO_APEAR);
         animationState[animationName].bits.additional.push(ansBox);
 
@@ -217,10 +234,25 @@ function BitAnimation(ansFunction, canvaAndCtx, animationName) {
 }
 
 function StartAnimation(canvaIndex, operationText, operationName) {
-    if (animationState[operationName].bits.number_1.length <= 0 && animationState[operationName].bits.number_2.length <= 0) return;
+    if (animationState[operationName].bits.number_1.length <= 0 || animationState[operationName].bits.number_2.length <= 0) return;
     if (animationState[operationName].isPlaying) return;
 
     DeleteOperationResult(canvaIndex);
+
+    let inputToLock = {input_1: null, input_2: null};
+    if (operationName == "bitOr") {
+        inputToLock.input_1 = INPUT_BIT_OR_1;
+        inputToLock.input_2 = INPUT_BIT_OR_2;
+    } else if (operationName == "bitAnd") {
+        inputToLock.input_1 = INPUT_BIT_AND_1;
+        inputToLock.input_2 = INPUT_BIT_AND_2;
+    } else if (operationName == "bitXor") {
+        inputToLock.input_1 = INPUT_BIT_XOR_1;
+        inputToLock.input_2 = INPUT_BIT_XOR_2;
+    }
+
+    inputToLock.input_1.readOnly = true;
+    inputToLock.input_2.readOnly = true;
 
     const CURRENT_CANVA_CTX = OUTPUT_CTX[canvaIndex];
 
@@ -229,17 +261,18 @@ function StartAnimation(canvaIndex, operationText, operationName) {
 
     let bitOperationBox_point = new Point(CURRENT_CANVA_CTX.canva.width - BIT_BOX_PARAM.width - BIT_BOX_PARAM.offset * 3, BIT_BOX_PARAM.offset);
 
-    animationState[operationName].hilight.object = new BitBox(CURRENT_CANVA_CTX.ctx, bitOperationBox_point, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, 15);
+    animationState[operationName].hilight.object = new BitBox(CURRENT_CANVA_CTX.ctx, bitOperationBox_point, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, BIT_BOX_PARAM.glowIntensity);
     animationState[operationName].hilight.object.startAppear(TIME_TO_APEAR);
     animationState[operationName].bits.additional.push(animationState[operationName].hilight.object);
 
-    let scale = (canvaIndex == 0 ? 1.35 : 2);
+    const BIT_OR_SCALE = 1.35, OTHER_BIT_SCALE = 2;
+    let scale = (operationName == "bitOr" ? BIT_OR_SCALE : OTHER_BIT_SCALE);
 
     let countOfNumbers = Math.max(animationState[operationName].bits.number_1.length, animationState[operationName].bits.number_2.length);
     let ansBox_point = new Point(CURRENT_CANVA_CTX.canva.width - BIT_BOX_PARAM.width*scale - BIT_BOX_PARAM.offset * 2 - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * countOfNumbers,
         BIT_BOX_PARAM.height*0.5 + BIT_BOX_PARAM.offset*2.5);
 
-    let animation_bit_sign = new BitBox(CURRENT_CANVA_CTX.ctx, ansBox_point, BIT_BOX_PARAM.width*scale, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), operationText, true, 15);
+    let animation_bit_sign = new BitBox(CURRENT_CANVA_CTX.ctx, ansBox_point, BIT_BOX_PARAM.width*scale, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), operationText, true, BIT_BOX_PARAM.glowIntensity);
     animation_bit_sign.startAppear(TIME_TO_APEAR);
     animationState[operationName].bits.additional.push(animation_bit_sign);
 
@@ -268,6 +301,8 @@ function BitNotAnimation() {
         } else if (animationState.bitNot.hilight.stop_x < animationState.bitNot.hilight.end_x) {
             animationState.bitNot.hilight.object.startDelete(TIME_TO_DISAPEAR);
             animationState.bitNot.isPlaying = false;
+
+            INPUT_BIT_NOT.readOnly = false;
         }
     } else {
         let number_index = animationState.bitNot.bits.number.length - 1 - animationState.bitNot.index;
@@ -277,7 +312,7 @@ function BitNotAnimation() {
 
         let ansBox_point = new Point(animationState.bitNot.hilight.stop_x + BIT_BOX_PARAM.offset, current_boxPosition.y + BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset * 2);
 
-        let ansBox = new BitBox(OUTPUT_BIT_NOT_CTX, ansBox_point, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), ans.toString(), true, 15);
+        let ansBox = new BitBox(OUTPUT_BIT_NOT_CTX, ansBox_point, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), ans.toString(), true, BIT_BOX_PARAM.glowIntensity);
         ansBox.startAppear(TIME_TO_APEAR);
         animationState.bitNot.bits.additional.push(ansBox);
 
@@ -294,19 +329,21 @@ function StartAnimation_BitNot() {
 
     DeleteOperationResult("input_bitNot");
 
+    INPUT_BIT_NOT.readOnly = true;
+
     let hilight_witdh = BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset*2;
     let hilight_height = BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset*2;
 
     let bitNotBox_point = new Point(OUTPUT_BIT_NOT.width - BIT_BOX_PARAM.width - BIT_BOX_PARAM.offset * 3, BIT_BOX_PARAM.offset);
 
-    animationState.bitNot.hilight.object = new BitBox(OUTPUT_BIT_NOT_CTX, bitNotBox_point, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, 15);
+    animationState.bitNot.hilight.object = new BitBox(OUTPUT_BIT_NOT_CTX, bitNotBox_point, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, BIT_BOX_PARAM.glowIntensity);
     animationState.bitNot.hilight.object.startAppear(TIME_TO_APEAR);
     animationState.bitNot.bits.additional.push(animationState.bitNot.hilight.object);
 
     let countOfNumbers = animationState.bitNot.bits.number.length;
     let ansBox_point = new Point(OUTPUT_BIT_NOT.width - BIT_BOX_PARAM.width*1.5 - BIT_BOX_PARAM.offset * 2 - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * countOfNumbers, BIT_BOX_PARAM.offset*2);
 
-    let animation_not_sign = new BitBox(OUTPUT_BIT_NOT_CTX, ansBox_point, BIT_BOX_PARAM.width*1.5, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "not", true, 15);
+    let animation_not_sign = new BitBox(OUTPUT_BIT_NOT_CTX, ansBox_point, BIT_BOX_PARAM.width*1.5, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "not", true, BIT_BOX_PARAM.glowIntensity);
     animation_not_sign.startAppear(TIME_TO_APEAR);
     animationState.bitNot.bits.additional.push(animation_not_sign);
 
@@ -337,6 +374,9 @@ function BitShiftAnimation() {
             animationState.bitShift.hilight.object.startDelete(TIME_TO_DISAPEAR);
             animationState.bitShift.imaginary.object.startDelete(TIME_TO_DISAPEAR);
             animationState.bitShift.isPlaying = false;
+
+            INPUT_BIT_SHIFT_1.readOnly = false;
+            INPUT_BIT_SHIFT_2.readOnly = false;
         }
     } else {
         let number_index = animationState.bitShift.bits.number.length - 1 - animationState.bitShift.index;
@@ -346,7 +386,7 @@ function BitShiftAnimation() {
 
         let ansBox_point = new Point(animationState.bitShift.hilight.stop_x + BIT_BOX_PARAM.offset, current_boxPosition.y + BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset * 2);
 
-        let ansBox = new BitBox(OUTPUT_BIT_SHIFT_CTX, ansBox_point, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), ans.toString(), true, 15);
+        let ansBox = new BitBox(OUTPUT_BIT_SHIFT_CTX, ansBox_point, BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--ansBox-color'), ans.toString(), true, BIT_BOX_PARAM.glowIntensity);
         ansBox.startAppear(TIME_TO_APEAR);
         animationState.bitShift.bits.additional.push(ansBox);
 
@@ -368,18 +408,21 @@ function StartAnimation_BitShift() {
 
     DeleteOperationResult("input_bitShift_1");
 
+    INPUT_BIT_SHIFT_1.readOnly = true;
+    INPUT_BIT_SHIFT_2.readOnly = true;
+
     let hilight_witdh = BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset*2;
     let hilight_height = BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset*2;
 
     let bitShiftBox_point = new Point(OUTPUT_BIT_NOT.width - BIT_BOX_PARAM.width - BIT_BOX_PARAM.offset * 3, BIT_BOX_PARAM.offset);
 
-    animationState.bitShift.hilight.object = new BitBox(OUTPUT_BIT_SHIFT_CTX, bitShiftBox_point.clone, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, 15);
+    animationState.bitShift.hilight.object = new BitBox(OUTPUT_BIT_SHIFT_CTX, bitShiftBox_point.clone, hilight_witdh, hilight_height, 6, GetCSSColor('--hilight-color'), "", true, BIT_BOX_PARAM.glowIntensity);
     animationState.bitShift.hilight.object.startAppear(TIME_TO_APEAR);
     animationState.bitShift.bits.additional.push(animationState.bitShift.hilight.object);
 
     bitShiftBox_point.x += (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * bitShiftOffset * (bitShiftOffsetDirection == "right" ? -1 : 1);
 
-    animationState.bitShift.imaginary.object = new BitBox(OUTPUT_BIT_SHIFT_CTX, bitShiftBox_point.clone, hilight_witdh, hilight_height, 6, GetCSSColor('--imaginary-color'), "", true, 15);
+    animationState.bitShift.imaginary.object = new BitBox(OUTPUT_BIT_SHIFT_CTX, bitShiftBox_point.clone, hilight_witdh, hilight_height, 6, GetCSSColor('--imaginary-color'), "", true, BIT_BOX_PARAM.glowIntensity);
     animationState.bitShift.imaginary.object.startAppear(TIME_TO_APEAR);
     animationState.bitShift.bits.additional.push(animationState.bitShift.imaginary.object);
 
@@ -388,7 +431,7 @@ function StartAnimation_BitShift() {
     let countOfNumbers = animationState.bitShift.bits.number.length;
     let ansBox_point = new Point(OUTPUT_BIT_NOT.width - BIT_BOX_PARAM.width*1.5 - BIT_BOX_PARAM.offset * 2 - (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * countOfNumbers, BIT_BOX_PARAM.offset*2);
 
-    let animation_shift_sign = new BitBox(OUTPUT_BIT_SHIFT_CTX, ansBox_point, BIT_BOX_PARAM.width*1.5, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "shift", true, 15);
+    let animation_shift_sign = new BitBox(OUTPUT_BIT_SHIFT_CTX, ansBox_point, BIT_BOX_PARAM.width*1.5, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), "shift", true, BIT_BOX_PARAM.glowIntensity);
     animation_shift_sign.startAppear(TIME_TO_APEAR);
     animationState.bitShift.bits.additional.push(animation_shift_sign);
 
@@ -477,7 +520,6 @@ function EventListeners() {
 }
 
 function AddBit(event) {
-    if (!CanType(this.id)) return;
     DeleteOperationResult(this.id);
 
     let binNumber = "";
@@ -492,7 +534,7 @@ function AddBit(event) {
     if (currentList.length < binNumber.length) {
         for (let i = currentList.length; i<binNumber.length; i++) {
             let currentBit = binNumber[binNumber.length - i - 1];
-            let currentBox = new BitBox(CANVA_AND_CTX.ctx, new Point(0, 0), BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), currentBit, true, 15);
+            let currentBox = new BitBox(CANVA_AND_CTX.ctx, new Point(0, 0), BIT_BOX_PARAM.width, BIT_BOX_PARAM.height, 6, GetCSSColor('--bitBox-color'), currentBit, true, BIT_BOX_PARAM.glowIntensity);
             currentBox.startAppear(TIME_TO_APEAR);
             currentList.unshift(currentBox);
         }
@@ -537,16 +579,6 @@ function InputList(inputID) {
     if (inputID == "input_bitShift_1") return animationState.bitShift.bits.number;
 
     return null;
-}
-
-function CanType(inputID) {
-    if (inputID == "input_bitOr_1" || inputID == "input_bitOr_2") return !animationState.bitOr.isPlaying;
-    if (inputID == "input_bitAnd_1" || inputID == "input_bitAnd_2") return !animationState.bitAnd.isPlaying;
-    if (inputID == "input_bitXor_1" || inputID == "input_bitXor_2") return !animationState.bitXor.isPlaying;
-    if (inputID == "input_bitShift_1") return !animationState.bitShift.isPlaying;
-    if (inputID == "input_bitNot") return !animationState.bitNot.isPlaying;
-
-    return true;
 }
 
 function SecondNumber(inputID) {

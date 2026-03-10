@@ -20,3 +20,7 @@
 #button_Addition, #button_Subtraction, #button_Multiplication, #button_Division{
     margin-left: 8px;
 }
+
+#input_binToDec {
+    width: 300px;
+}

@@ -19,7 +19,7 @@
         <main>
             <div>
                 <h1> Бітові операції </h1>
-                <div style="width: 100%;">
+                <div class="mainContent">
                     <div>
                         <h2> Вступ </h2>
                         <p> Так як комп’ютер вміє оперувати тільки 0 та 1, це відкриває можливість для деяких операцій, які не існують в десятковій системі числення, бо можна вважати, що <b>1 – правда</b> і <b>0 – хиба</b>. І тоді в нас є 6 операції: </p>
@@ -50,7 +50,7 @@
                             </tbody>
                         </table>
                         <p> Нижче ви можете переглянути, як відбувається побітове АБО з 2 числами. </p>
-                        <div id="interaction">
+                        <div>
                             <input id="input_bitOr_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_bitOr_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <button id="button_bitOr" type="button"> Почати анімацію </button> <br>
@@ -76,7 +76,7 @@
                             </tbody>
                         </table>
                         <p> Нижче ви можете переглянути, як відбувається побітове І з 2 числами. </p>
-                        <div id="interaction">
+                        <div>
                             <input id="input_bitAnd_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_bitAnd_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <button id="button_bitAnd" type="button"> Почати анімацію </button> <br>
@@ -102,7 +102,7 @@
                             </tbody>
                         </table>
                         <p> Нижче ви можете переглянути, як відбувається побітове ВИКЛЮЧНЕ АБО з 2 числами. </p>
-                        <div id="interaction">
+                        <div>
                             <input id="input_bitXor_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_bitXor_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <button id="button_bitXor" type="button"> Почати анімацію </button> <br>
@@ -125,7 +125,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div id="interaction">
+                        <div>
                             <input id="input_bitNot" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <button id="button_bitNot" type="button"> Почати анімацію </button> <br>
                             <div class="canvasContainer">
@@ -137,7 +137,7 @@
                         <h2> Побітовий ЗСУВ ВПРАВО/ВЛІВО (BIT RIGHT/LEFT SHIFT) </h2>
                         <p> Ці дві операції працюють тільки над одним числом. Для реалізації цього зсуву  потрібні два числа: те, яке змінюємо (вхідне) та те, яке вказує на скільки бітів робимо зсув. <br> Побітовий зсув вправо та вліво зсуває біти числа, на якусь кількість позицій  вправо та вліво відповідно. </p>
                         <p> Нижче ви можете переглянути, як відбувається побітове ПОБІТОВИЙ ЗСУВ, і вибрати його напрямок у випадаючому списку. </p>
-                        <div id="interaction">
+                        <div>
                             <input id="input_bitShift_1" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_bitShift_2" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <select id="shiftDirection">
@@ -157,7 +157,6 @@
             Made by DuckMim.
         </footer>
         
-        <script src="../js/canvasOperations.js"></script>
         <script type="module" src="../js/pagesJS/BinaryOperation.js"></script>
     </body>
 </html>

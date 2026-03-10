@@ -19,14 +19,14 @@
         <main>
             <div>
                 <h1> Системи числення </h1>
-                <div style="width: 100%;">
+                <div class="mainContent">
                     <div>
                         <h2> Вступ </h2>
                         <p> Комп'ютер  не вміє оперувати числами так, як ми. Комп’ютер знає тільки дві цифри <b>0</b> та <b>1</b>. Тому для того, щоб комп'ютер міг робити розрахунки з нашими числами, їх переводять у <b>двійкову систему числення</b>. </p>
                         <p> <b>Двійкова система числення</b> — це система числення, де замість чисел від 0 до 9 і множення на 10 використовуються <b>0</b> та <b>1</b> і множення на <b>2</b>. Тобто, якщо є число 341<sub>10</sub>, то його можна написати як 3×10<sup>2</sup> + 4×10<sup>1</sup> + 1×10<sup>0</sup>.</p>
                         <p> В двійковій системі числення число буде виглядати так: 10110<sub>2</sub>. Це можна записати як  1×2<sup>4</sup> + 0×2<sup>3</sup> + 1×2<sup>2</sup> + 1×2<sup>1</sup> + 0×2<sup>0</sup>. І якщо ви порахуєте значення цього виразу, то це буде 1×2<sup>4</sup> + 0×2<sup>3</sup> + 1×2<sup>2</sup> + 1×2<sup>1</sup> + 0×2<sup>0</sup> = 1×16 + 0×8 + 1×4 + 1×2 + 0×1 = 16 + 4 + 2 = 22<sub>10</sub>.</p>
                         <p> Нижче ви можете побачити, як число з десяткової системи числення виглядає в двійковій. </p>
-                        <div id="interaction">
+                        <div>
                             <input id="input_decimalNumber_positive" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число..."> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_decimalNumber_positive" width="980" height="45"></canvas>
@@ -44,10 +44,17 @@
                         <p> І щоб можна було перевести від'ємне число з цього двійкового запису в  десятковий, можна додати всі степені двійки (як раніше було пояснено для додатних чисел), проте крім останнього "знакового" біта, який потрібно від тієї суми відняти
                             (-2<sup>номер того біта</sup>). Якщо в нас буде число 11101101<sub>2</sub>, то це буде: 2<sup>0</sup> + 2<sup>2</sup> + 2<sup>3</sup> + 2<sup>5</sup> + 2<sup>6</sup> - 2<sup>7</sup> = 1 + 4 + 8 + 32 + 64 - 128 = -19. </p>
                         <p> Знизу зможете побачити, як виглядає від'ємне число у двійковій системі. </p>
-                        <div id="interaction">
+                        <div>
                             <input id="input_decimalNumber_negative" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число..."> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_decimalNumber_negative" width="980" height="45"></canvas>
+                            </div>
+                        </div>
+                        <p> Також нижче ви можете перетворити двійкове число на десяткове. </p>
+                        <div>
+                            <input id="input_binToDec" maxlength="32" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число..."> <br>
+                            <div class="canvasContainer">
+                                <canvas id="output_binToDec" width="980" height="45"></canvas>
                             </div>
                         </div>
                         <p> Представлення дробових чисел в двійковій системі та дії з ними  набагато складніші, ніж для цілих чисел. Тому про них буде знизу окремо. </p>
@@ -157,7 +164,6 @@
             Made by DuckMim.
         </footer>
         
-        <script src="../js/canvasOperations.js"></script>
         <script type="module" src="../js/pagesJS/NumeralSystem.js"></script>
     </body>
 </html>

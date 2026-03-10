@@ -240,3 +240,5 @@ class BitBox {
     get getCTX() { return this.ctx; }
     set position(point) { this.point = point; }
 }
+
+export { Point, BitBox, ClearCanvasWithTransforms, GlowingLine, GetCSSColor, ScrollToRight, EaseOutCubic }

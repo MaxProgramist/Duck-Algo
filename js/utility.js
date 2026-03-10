@@ -1,6 +1,4 @@
 function DecToBin(decimalNumber) {
-    const BITS_IN_BYTE = 8;
-
     let binaryResult = "";
     let isNegative = decimalNumber < 0;
     let absoluteNumber = Math.abs(decimalNumber);
@@ -12,7 +10,7 @@ function DecToBin(decimalNumber) {
         else binaryResult += isNegative ? "1" : "0";
     }
 
-    let targetLength = Math.ceil((binaryResult.length+1) / BITS_IN_BYTE) * BITS_IN_BYTE - 1;
+    let targetLength = Math.ceil((binaryResult.length+1) / 8) * 8 - 1;
     
     for (let i = binaryResult.length; i < targetLength; i++)
         binaryResult += isNegative ? "1" : "0";
@@ -50,8 +48,30 @@ function DecToBin_Float(inputElement) {
     return binaryString;
 }
 
+function BinaryToDecimalComplement(binaryString) {
+    if (binaryString.length % 8 !== 0 || binaryString.length == 0) {
+        return "";
+    }
+
+    let isNegative = binaryString[0] === '1';
+    let resultDecimal = 0;
+
+    if (isNegative) {
+        let invertedBits = "";
+        for (let i = 0; i < binaryString.length; i++) {
+            invertedBits += binaryString[i] === '0' ? '1' : '0';
+        }
+        
+        resultDecimal = -(parseInt(invertedBits, 2) + 1);
+    } else {
+        resultDecimal = parseInt(binaryString, 2);
+    }
+
+    return resultDecimal.toString();
+}
+
 function Input_Filter(event, canBeNegative, type = "int") {
-    let limits = {
+    const LIMITS = {
         "int": {"min": -2147483648, "max": 2147483647},
         "short": {"min": -32768, "max": 32767},
         "char": {"min": -128, "max": 127}
@@ -59,7 +79,7 @@ function Input_Filter(event, canBeNegative, type = "int") {
 
     event.target.value = numberFilter(event.target.value, canBeNegative);
     if (IsNumber(event.target.value))
-        event.target.value = clamp(parseInt(event.target.value), limits[type].min, limits[type].max);
+        event.target.value = clamp(parseInt(event.target.value), LIMITS[type].min, LIMITS[type].max);
 }
 
 function numberFilter(inputString, canBeNegative) { 
@@ -76,4 +96,4 @@ function IsNumber     (value)         { return !(value.length == 0 || (value.len
 function reverseString(string)        { return string.split("").reverse().join(""); }
 function clamp        (val, min, max) { return Math.min(Math.max(val, min), max); }
 
-export { DecToBin, DecToBin_Float, Input_Filter, IsNumber, clamp }
+export { DecToBin, DecToBin_Float, BinaryToDecimalComplement, Input_Filter, IsNumber, clamp }

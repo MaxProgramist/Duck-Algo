@@ -160,6 +160,10 @@ body.is-loading * {
   transition: none !important;
 }
 
+.mainContent {
+    width: 100%;
+}
+
 .canvasContainer {
     width: 100%;
     max-width: 100%;
