@@ -1,9 +1,11 @@
 function InitPageSettings() {
-  const pageBody = document.body;
-  
-  window.addEventListener("load", () => {
-    pageBody.classList.remove("is-loading");
-  });
+    window.addEventListener("DOMContentLoaded", () => {
+      const pageBody = document.body;
+    
+      if (pageBody) {
+        pageBody.classList.remove("is-loading");
+      }
+    });
 }
 
 InitPageSettings();
