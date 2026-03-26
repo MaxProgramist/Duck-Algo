@@ -1,32 +1,50 @@
 :root {
     /** --- Colors --- **/
-    --color-text: #F9F9F9;
+    --color-text: #E5E7EB;
 
-    --color-background: #252525;
-    --color-background-line: #353839;
-    --color-navigation: #353839AA;
-    --color-header_1: #353839AA;
-    --color-footer: #353839AA;
+    --color-background: #18181B;
+    --color-background-line: #27272A;
+    --color-navigation: #18181BCC;
+    --color-footer: #18181BE6;
 
-    --color-button: #4A5568;
-    --color-button-hover: #667EEA;
+    --color-button: #3F3F46;
+    --color-button-hover: #52525B;
+    --color-button-pressed: #27272A;
+    --color-button-disabled: #27272A;
+    --color-button-text-disabled: #71717A;
 
-    --color-input: #2D3748;
-    --color-input-selected: #5A67D8;
+    --color-input: #27272A;
+    --color-input-border: #3F3F46;
+    --color-input-focused: #27272A;
+    --color-input-border-focused: #38BDF8;
+    --color-input-readonly: #222226;
+    --color-input-disabled: #18181B;
 
-    --color-scrollbar: #4A5568;
-    --color-scrollbar-hover: #667EEA;
+    --color-select: #27272A;
+    --color-select-border: #3F3F46;
+    --color-select-focused: #27272A;
+    --color-select-border-focused: #38BDF8;
+    --color-select-disabled: #18181B;
+
+    --color-scrollbar: #52525B80;
+    --color-scrollbar-hover: #71717AB3;
     --color-scrollbar-background: #00000000;
+    
+    --table-color: #3F3F4666;
+    --canva-color: #27272AB3;
 
     /** --- Other --- **/
     --main-padding: 10px;
-    --background-size: 65px;
+    --background-size: 75px;
 
     --button-glowing-intensity: 9px;
     --button-glowing-spreading: 5px;
 
     --input-border: 3px;
     --input-border-radius: 8px;
+
+    --select-border: 3px;
+    --select-border-radius: 8px;
 }
 
 html, body {
@@ -105,11 +123,18 @@ button:hover {
     box-shadow: 0 0 var(--button-glowing-intensity) var(--button-glowing-spreading) var(--color-button-hover);
 }
 
+button:disabled {
+    background-color: var(--color-button-disabled);
+    box-shadow: 0 0 var(--button-glowing-intensity) var(--button-glowing-spreading) var(--color-button-disabled);
+}
+
 input {
     font-family: 'Exo 2', sans-serif;
 
-    border: var(--input-border) solid var(--color-input);
+    border: var(--input-border) solid var(--color-input-border);
     border-radius: var(--input-border-radius);
+
+    outline: none;
 
     background-color: var(--color-input);
     color: var(--color-text);
@@ -126,21 +151,43 @@ input::placeholder {
 }
 
 input:focus {
-    background-color: var(--color-input-selected);
+    background-color: var(--color-input-focused);
+    border-color: var(--color-input-border-focused);
+}
+
+input:read-only {
+    background-color: var(--color-input-readonly);
 }
 
 select {
     font-family: 'Exo 2', sans-serif;
+    outline: none;
 
-    border: var(--input-border) solid var(--color-input);
-    border-radius: var(--input-border-radius);
+    border: var(--select-border) solid var(--color-select-border);
+    border-radius: var(--select-border-radius);
 
-    background-color: var(--color-input);
+    background-color: var(--color-select);
     color: var(--color-text);
     margin: 7px auto;
     padding: 6px;
 
     transition: 0.25s linear;
+}
+
+select:focus {
+    background-color: var(--color-select-focused);
+    border-color: var(--color-select-border-focused);
+}
+
+select:disabled {
+    border-color: var(--color-select-disabled);
+    background-color: var(--color-select-disabled);
+
+    transition: 0.25s linear;
+}
+
+option:disabled {
+    background-color: var(--color-select-disabled);
 }
 
 table {
@@ -164,7 +211,17 @@ body.is-loading * {
   transition: none !important;
 }
 
-.mainContent {
+a {
+    color: var(--color-text);
+    text-decoration: none;
+    margin: 5px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#mainContent {
     width: 100%;
 }
 
@@ -206,7 +263,7 @@ body.is-loading * {
     visibility: hidden;
 }
 
-.table-of-contents {
+.tableOfContents {
     float: right;
     width: 320px;
     margin-left: 20px;
@@ -217,19 +274,9 @@ body.is-loading * {
     border-radius: 5px;
 }
 
-.table-of-contents a {
-    color: var(--color-text);
-    text-decoration: none;
-    margin: 5px;
-}
-
-.table-of-contents li {
+.tableOfContents li {
     margin-bottom: 10px;
     font-size: 18px;
-}
-  
-.table-of-contents a:hover {
-    text-decoration: underline;
 }
 
 #backToTop {

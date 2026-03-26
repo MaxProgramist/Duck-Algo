@@ -1,0 +1,19 @@
+:root {
+    --bitBox-color: #00E5FF;
+    --hilight-color: #ED8936; 
+    --ansBox-color: #48BB78;
+    --imaginary-color: #D2A2FF;
+    --error-color: #F56565;
+}
+
+td {
+    background-color: var(--table-color);
+}
+
+#input_array, #select_array_type, #select_array_operationType {
+    margin: auto 2px;
+}
+
+#button_array {
+    margin-left: 8px;
+}

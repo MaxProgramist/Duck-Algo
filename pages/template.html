@@ -19,16 +19,11 @@
         <main>
             <div>
                 <h1> Тема сторінки </h1>
-                <div style="width: 100%;">
-                    <div class="table-of-contents">
+                <div id="mainContent">
+                    <div class="tableOfContents">
                         <h2> Зміст</h2>
-                        <ul>
-                            <li><a href="#introduction"> Вступ </a></li>
-                            <li><a href="#something"> Пункт 1 </a></li>
-                            <ul>
-                                <li><a href="#float_addition/subtraction"> Щось 1 </a></li>
-                                <li><a href="#float_multiplication/division"> Щось 2 </a></li>
-                            </ul>
+                        <ul id="tableOfContents">
+                            
                         </ul>
                     </div>
                     <div>
@@ -38,10 +33,10 @@
                     <div>
                         <h2 id="something"> Пункт 1 </h2>
                         <p> * про пункт 1 * </p>
-                        <div id="interaction">
+                        <div>
                             <input id="input_" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
                             <input id="input_" inputmode="numeric" autocomplete="off" placeholder="Введи якесь число...">
-                            <button id="button_" type="button" onclick=""> Почати анімацію </button> <br>
+                            <button id="button_" type="button"> Почати анімацію </button> <br>
                             <div class="canvasContainer">
                                 <canvas id="output_" width="1010" height="105"></canvas>
                             </div>

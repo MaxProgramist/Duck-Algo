@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+
+        <script src="../js/loading_page.js"></script>
+        <script src="../js/loadPage.js"></script>
+
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../css/pagesCSS/DataStructures.css">
+        <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;800&display=swap" rel="stylesheet">
+        <title> Duck Algo </title>
+    </head>
+    <body>
+        <nav>
+            <button type="button" onclick="LoadPage(`../index.html`)"> Головна </button> <br>
+            Всі сторінки: <br>
+        </nav>
+        <main>
+            <div>
+                <h1> Змінні та структури данних </h1>
+                <div id="mainContent">
+                    <div class="tableOfContents">
+                        <h2> Зміст</h2>
+                        <ul id="tableOfContents">
+                            
+                        </ul>
+                    </div>
+                    <div>
+                        <h2 id="introduction"> Вступ </h2>
+
+                        <table>
+                            <colgroup>
+                                <col style="width: auto;"><col style="width: auto;"><col style="width: 29%;"><col style="width: 29%;">
+                            </colgroup>
+                            <tbody>
+                                <tr> <td colspan="4"> <b> Типи данних </b> </td></tr>
+                                <tr>
+                                    <td rowspan="2"> <b>Тип даних</b> </td> <td rowspan="2"> <b>Назва</b> </td> <td colspan="2"> <b>Межі</b> </td>
+                                </tr>
+                                <tr>
+                                    <td> <b>Знакові</b> </td> <td> <b>Беззнакові</b> </td>
+                                </tr>
+                                <tr>
+                                    <td> <b>Цілі числа</b> </td> <td> int (4 байти) </td> <td> -2,147,483,648 до 2,147,483,647 </td> <td> 0 до 4,294,967,295 </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="2"> <b>Дробові числа</b> </td> <td> float (4 байти) </td> <td> ±3.4028235×10<sup>38</sup> до ±1.7549435×10<sup>-38</sup> </td> <td> - </td>
+                                </tr>
+                                <tr>
+                                    <td> double (8 байти) </td> <td> ±1.79769×10<sup>308</sup> до <br> ±2.22507×10<sup>-308</sup> </td> <td> - </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="2"> <b>Символи</b> </td> <td> char (1 байти) </td> <td> -128 до 127 </td> <td> 0 до 255 </td>
+                                </tr>
+                                <tr>
+                                    <td> wchar_t (2 байти) </td> <td> - </td> <td> 0 до 65535 </td>
+                                </tr>
+                                <tr>
+                                    <td> <b>Булеві</b> </td> <td> bool (1 байт) </td> <td> -128 до 127<sup><a href="#introduction">[1]</a></і> </td> <td> - </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p> * Про тему * </p>
+                    </div>
+                    <div>
+                        <h2 id="array"> Масиви </h2>
+                        <p> * про пункт 1 * </p>
+                        <div>
+                            Тип динних у масиві: 
+                            <select id="select_array_signType">
+                                <option value="signed"> SIGNED </option>
+                                <option value="unsigned"> UNSIGNED </option>
+                            </select>
+                            <select id="select_array_type">
+                                <option value="int"> INT </option>
+                                <option value="float"> FLOAT </option>
+                                <option value="double"> DOUBLE </option>
+                                <option value="char"> CHAR </option>
+                                <option value="wchar_t"> WCHAR_T </option>
+                                <option value="bool"> BOOL </option>
+                            </select> <br>
+                            <select id="select_array_operationType">
+                                <option value="add"> Додати елемент </option>
+                                <option value="remove"> Видалити елемент </option>
+                            </select>
+
+                            <input id="input_array" inputmode="numeric" autocomplete="off" placeholder="Введіть значення...">
+                            
+                            <button id="button_array" type="button"> Застосувати </button> <br>
+                            <div class="canvasContainer">
+                                <canvas id="output_array" width="1010" height="75"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 id="linkedList"> Linked list </h2>
+                        <p> * про пункт 1 * </p>
+                    </div>
+                    <div>
+                        <h2 id="queue"> Черги (Queue) </h2>
+                        <p> * про пункт 1 * </p>
+                    </div>
+                    <div>
+                        <h2 id="stack"> Стек (Stack) </h2>
+                        <p> * про пункт 1 * </p>
+                    </div>
+                    <div>
+                        <h2 id="map"> Словник (Map) </h2>
+                        <p> * про пункт 1 * </p>
+                    </div>
+                    <div>
+                        <h2 id="set"> Сет (Set) </h2>
+                        <p> * про пункт 1 * </p>
+                    </div>
+                </div>
+            </div>
+
+            <!--
+            <select id="shiftDirection">
+                <option value="int"> INT </option>
+                <option value="float"> FLOAT </option>
+                <option value="double"> DOUBLE </option>
+                <option value="char"> CHAR </option>
+                <option value="wchar_t"> WCHAR_T </option>
+                <option value="bool"> BOOL </option>
+            </select>
+            -->
+
+            <button id="backToTop"> 
+                <svg width="24" height="24" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.75751 5.23078L12.0321 1.02029L16.2425 5.29492L14.8177 6.69842L13.0141 4.86736L12.9427 17.1555C14.1054 17.5732 14.9345 18.6881 14.9283 19.994C14.9204 21.6508 13.5709 22.9876 11.9141 22.9797C10.2572 22.9718 8.92049 21.6223 8.92836 19.9655C8.93456 18.6589 9.77508 17.5514 10.9427 17.1454L11.0142 4.83017L9.161 6.65563L7.75751 5.23078ZM11.9331 18.9797C11.3808 18.9771 10.931 19.4227 10.9283 19.975C10.9257 20.5273 11.3713 20.9771 11.9236 20.9797C12.4759 20.9823 12.9257 20.5367 12.9283 19.9845C12.9309 19.4322 12.4853 18.9824 11.9331 18.9797Z" fill="currentColor" /> </svg> 
+            </button>
+        </main>
+        <footer>
+            Made by DuckMim.
+        </footer>
+        
+        <script type="module" src="../js/pagesJS/DataStructures.js"></script>
+    </body>
+</html>

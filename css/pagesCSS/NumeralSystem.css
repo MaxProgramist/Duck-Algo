@@ -1,9 +1,9 @@
 :root {
-    --canva-color: #353839AA;
     --bitBox-color: #00E5FF;
     --hilight-color: #ED8936; 
     --ansBox-color: #48BB78;
-    --imaginary-color: #ECC94B;
+    --imaginary-color: #D2A2FF;
+    --error-color: #F56565;
 
     --float-sign-color: #00E5FF;
     --float-power-color: #ECC94B;
