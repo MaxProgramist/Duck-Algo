@@ -1,5 +1,6 @@
 import { Input_Filter, UpdateBoxes, NumberFilter, ConvertBtwTypes, clamp, TYPES_SIGNES } from '../utility.js'
-import { Point, Size, BitBox, ClearCanvasWithTransforms, GetCSSColor, EaseOutCubic, ScrollToRight, CanvasResize } from '../canvasOperations.js'
+import { Point, Size, TextDisplay, ClearCanva, GetCSSColor, ResizeCanva } from '../canvasOperations.js'
+import { EaseOutCubic } from '../easingFunctions.js'
 
 //* ---------- Variables ---------- *//
 
@@ -30,6 +31,8 @@ Object.values(OUTPUT_CTX).forEach(item => { CANVAS_OBSERVER.observe(item.canva);
 
 //* ------------ Other ------------ *//
 const BIT_BOX_PARAM = {width: 25, height: 25, radius: 6, offset: 5, glowIntensity: 15};
+
+const CANVA_CORNER_RADIUS = 15;
 
 const TIME_TO_APPEAR = 500;
 const TIME_TO_DISAPPEAR = 250;
@@ -91,7 +94,7 @@ function Animate(currentTime, repeat = true) {
 
     for (let currentCanva of Object.values(OUTPUT_CTX))
         if (currentCanva.visible)
-            ClearCanvasWithTransforms(currentCanva.ctx, currentCanva.canva, GetCSSColor('--canva-color'));
+            ClearCanva(currentCanva.ctx, currentCanva.canva, GetCSSColor('--canva-color'), CANVA_CORNER_RADIUS);
 
     UpdateBoxes(ANIMATION_NAMES, OUTPUT_CTX, animationState, currentTime);
 
@@ -150,6 +153,8 @@ function ChangeStructureType(event, operationType) {
             break;
         }
     }
+
+    animationState.array.lastType = SELECT_SIGN_TYPE + " " + event.target.value;
 }
 
 // Not used, but will be used in the future
@@ -197,14 +202,14 @@ function ArrayAddition() {
 
     if (edgeX >= OUTPUT_ARRAY.width - BIT_BOX_PARAM.offset*2) {
         newPoint.y += (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * 2 + BIT_BOX_PARAM.offset*2;
-        CanvasResize(OUTPUT_ARRAY, OUTPUT_ARRAY.width, OUTPUT_ARRAY.height + (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * 2 + BIT_BOX_PARAM.offset*2,
+        ResizeCanva(OUTPUT_ARRAY, OUTPUT_ARRAY.width, OUTPUT_ARRAY.height + (BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset) * 2 + BIT_BOX_PARAM.offset*2,
             TIME_TO_SCALE, changingCount, Animate);
         newPoint.x = BIT_BOX_PARAM.offset*2;
     }
     
     let newBoxSize = new Size(boxWidth, BIT_BOX_PARAM.height);
 
-    let newIndexBox = new BitBox(OUTPUT_CTX.array.ctx, newPoint.clone, newBoxSize, 
+    let newIndexBox = new TextDisplay(OUTPUT_CTX.array.ctx, newPoint.clone, newBoxSize, 
         BIT_BOX_PARAM.radius, GetCSSColor("--imaginary-color"), animationState.array.bits.index.length, 
         true, BIT_BOX_PARAM.glowIntensity
     );
@@ -213,7 +218,7 @@ function ArrayAddition() {
     animationState.array.bits.index.push(newIndexBox);
     newPoint.y += BIT_BOX_PARAM.width + BIT_BOX_PARAM.offset;
 
-    let newElement = new BitBox(OUTPUT_CTX.array.ctx, newPoint, newBoxSize, 
+    let newElement = new TextDisplay(OUTPUT_CTX.array.ctx, newPoint, newBoxSize, 
         BIT_BOX_PARAM.radius, GetCSSColor("--bitBox-color"), visualizedValue, 
         true, BIT_BOX_PARAM.glowIntensity
     );
@@ -311,7 +316,7 @@ function WaitToDeleteArray() {
 
     if (CURRENT_LENGHT >= 2) {
         let newWindowHeight = animationState.array.deleteAnimation.positionToMoveElement[CURRENT_LENGHT-1].y + BIT_BOX_PARAM.height + BIT_BOX_PARAM.offset * 2;
-        CanvasResize(OUTPUT_ARRAY, OUTPUT_ARRAY.width, newWindowHeight, TIME_TO_SCALE, changingCount, Animate);
+        ResizeCanva(OUTPUT_ARRAY, OUTPUT_ARRAY.width, newWindowHeight, TIME_TO_SCALE, changingCount, Animate);
     }
 
     animationState.array.deleteAnimation.startTime = Date.now();

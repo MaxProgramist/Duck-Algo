@@ -1,10 +1,10 @@
-let currentPath = "pages.json";
+let pageListPath = "pages.json";
 const CURRENT_PAGE = window.location.pathname.split("/").pop();
 
 if (CURRENT_PAGE === "index.html" || CURRENT_PAGE === "")
-    currentPath = "pages/pages.json";
+    pageListPath = "pages/pages.json";
 
-MakePageButtons(currentPath);
+InitBtwPageNavigationButtons(pageListPath);
 document.addEventListener("DOMContentLoaded", InitPageControl);
 
 
@@ -19,11 +19,10 @@ function InitScrollButton() {
     if (SCROLL_BUTTON == null) return;
 
     window.addEventListener("scroll", () => {
-        if (window.scrollY > 300) {
+        if (window.scrollY > 300)
             SCROLL_BUTTON.classList.add("is-visible");
-        } else {
+        else
             SCROLL_BUTTON.classList.remove("is-visible");
-        }
     });
 
     SCROLL_BUTTON.addEventListener("click", () => { window.scrollTo({top: 0, behavior: "smooth"}); });
@@ -37,39 +36,39 @@ function InitContentTable() {
 
     const CONTENT_DIV = MAIN_CONTENT.children;
 
-    let lastNewList = null;
-    for (const CHILD of CONTENT_DIV) {
-        const CURRENT_ELEMENT = CHILD.children[0];
-        if (CURRENT_ELEMENT.id == "") continue;
+    let lastObject_LI = null;
+    for (const CURRENT_CHILD of CONTENT_DIV) {
+        const CHILD_ID = CURRENT_CHILD.children[0];
+        if (CHILD_ID.id == "") continue;
 
-        let newLIObject = document.createElement("li");
-        let newAObject = document.createElement("a");
-        newAObject.href = `#${CURRENT_ELEMENT.id}`;
-        newAObject.innerHTML = CURRENT_ELEMENT.innerHTML;
-        newLIObject.appendChild(newAObject);
+        let newObject_LI = document.createElement("li");
+        let newObject_A = document.createElement("a");
+        newObject_A.href = `#${CHILD_ID.id}`;
+        newObject_A.innerHTML = CHILD_ID.innerHTML;
+        newObject_LI.appendChild(newObject_A);
 
-        if (CURRENT_ELEMENT.tagName == "H3") {
-            if (lastNewList == null) {
-                lastNewList = document.createElement("ul");
-                CONTENT_TABLE.appendChild(lastNewList);
+        if (CHILD_ID.tagName == "h3") {
+            if (lastObject_LI == null) {
+                lastObject_LI = document.createElement("ul");
+                CONTENT_TABLE.appendChild(lastObject_LI);
             }
 
-            lastNewList.appendChild(newLIObject);
+            lastObject_LI.appendChild(newObject_LI);
         } else {
-            lastNewList = null;
-            CONTENT_TABLE.appendChild(newLIObject);
+            lastObject_LI = null;
+            CONTENT_TABLE.appendChild(newObject_LI);
         }
     }
 }
 
-function LoadPage(pagePath) {
-    window.location.href = pagePath;
-}
-
-async function MakePageButtons(path) {
+async function InitBtwPageNavigationButtons(path) {
     const CURRENT_PAGE = window.location.pathname.split("/").pop();
-    if (CURRENT_PAGE !== "index.html" && CURRENT_PAGE !== "")
+    const IS_INDEX_PAGE = CURRENT_PAGE === "index.html";
+    const IS_EMPTY_PAGE = CURRENT_PAGE === "";
+
+    if (!IS_INDEX_PAGE && !IS_EMPTY_PAGE)
         path = path.replace(/^.*[\\/]pages[\\/]/, "");
+
     const JSON_FILE = await fetch(path);
     const DATA = await JSON_FILE.json();
     const NAVIGATION = document.getElementsByTagName('nav')[0];
@@ -78,8 +77,10 @@ async function MakePageButtons(path) {
         let newButton = document.createElement('button');
         newButton.textContent = currElement.title; 
         let currentPathToPage = currElement.path;
-        if (CURRENT_PAGE !== "index.html" && CURRENT_PAGE !== "")
+
+        if (!IS_INDEX_PAGE && !IS_EMPTY_PAGE)
             currentPathToPage = currentPathToPage.replace(/^pages[\\/]/, "");
+
         newButton.onclick = () => LoadPage(currentPathToPage);
         newButton.type = "button";
 
@@ -87,3 +88,5 @@ async function MakePageButtons(path) {
         NAVIGATION.appendChild(document.createElement('br'));
     }
 }
+
+function LoadPage(pagePath) { window.location.href = pagePath; }

@@ -1,14 +1,33 @@
-const ScrollToRight = (element) => { element.scrollLeft = element.scrollWidth; };
+import { EaseOutCubic, EaseOutBack } from './easingFunctions.js'
 
-function ClearCanvasWithTransforms(ctx, canvas, color, radius=15) {
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    RoundedRect(ctx, new Point(0, 0), canvas.width, canvas.height, radius, color, false);
-    ctx.restore();
+const DEFULT_FONT = "'Exo 2'";
+
+function Effect_Glowing(drawingCtx, color, glowIntensity) {
+    drawingCtx.shadowBlur = glowIntensity;
+    drawingCtx.shadowColor = color;
+    drawingCtx.shadowOffsetX = 0;
+    drawingCtx.shadowOffsetY = 0;
 }
 
-function CanvasResize(canvasElement, width, height, duration, changingCount, AnimateFunction) {
+function Effect_Stroke(drawingCtx) {
+    drawingCtx.stroke();
+}
+
+function ScrollToRight(canvasToScroll) {
+    canvasToScroll.scrollLeft = canvasToScroll.scrollWidth;
+}
+
+function ClearCanva(drawingCtx, canvasToDraw, clearCtxColor, cornerRadius) {
+    let canvasSize = new Size(canvasToDraw.width, canvasToDraw.height);
+
+    drawingCtx.save();
+    drawingCtx.setTransform(1, 0, 0, 1, 0, 0);
+    drawingCtx.clearRect(0, 0, canvasSize.x, canvasSize.y);
+    DrawRoundedRect(drawingCtx, new Point(0, 0), canvasSize, cornerRadius, clearCtxColor, [], []);
+    drawingCtx.restore();
+}
+
+function ResizeCanva(canvasElement, width, height, duration, changingCount, AnimateFunction) {
     const START_WIDTH = canvasElement.width;
     const START_HEIGHT = canvasElement.height;
     let startTime = null;
@@ -28,112 +47,101 @@ function CanvasResize(canvasElement, width, height, duration, changingCount, Ani
     requestAnimationFrame(Step);
 }
 
-function DrawText(ctx, text, point, fontSize = 30, font = "'Exo 2'") {
-    ctx.font = `${fontSize}px ${font}, sans-serif`;
-    ctx.fillText(text, point.x, point.y);
+function DrawText(drawingCtx, point, text, fontSize, fontColor, font = DEFULT_FONT) {
+    drawingCtx.fillStyle = fontColor;
+    drawingCtx.font = `${fontSize}px ${font}, sans-serif`;
+    drawingCtx.fillText(text, point.x, point.y);
 }
 
-function RoundedRect(ctx, point, width, height, radius, color, useStroke = true, glowing = false, glowIntensity = 5) {
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.moveTo(point.x, point.y + radius);
-    ctx.arcTo(point.x, point.y + height, point.x + radius, point.y + height, radius);
-    ctx.arcTo(point.x + width, point.y + height, point.x + width, point.y + height - radius, radius);
-    ctx.arcTo(point.x + width, point.y, point.x + width - radius, point.y, radius);
-    ctx.arcTo(point.x, point.y, point.x, point.y + radius, radius);
+function DrawRoundedRect(drawingCtx, point, size, radius, color, beforeFillEffects, afterFillEffects) {
+    drawingCtx.fillStyle = color;
+    drawingCtx.beginPath();
+    drawingCtx.moveTo(point.x, point.y + radius);
+    drawingCtx.arcTo(point.x, point.y + size.y, point.x + radius, point.y + size.y, radius);
+    drawingCtx.arcTo(point.x + size.x, point.y + size.y, point.x + size.x, point.y + size.y - radius, radius);
+    drawingCtx.arcTo(point.x + size.x, point.y, point.x + size.x - radius, point.y, radius);
+    drawingCtx.arcTo(point.x, point.y, point.x, point.y + radius, radius);
 
-    if (glowing) {
-        ctx.shadowBlur = glowIntensity;
-        ctx.shadowColor = color;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
-    }
-    ctx.fill();
+    for (let CurrentEffect of beforeFillEffects)
+        CurrentEffect(drawingCtx);
 
-    if (useStroke) ctx.stroke();
+    drawingCtx.fill();
+
+    for (let CurrentEffect of afterFillEffects)
+        CurrentEffect(drawingCtx);
 }
 
-function GlowingLine(ctx, startX, startY, endX, endY, lineWidth = 5, color, glowing = false, glowIntensity = 5) {
-    ctx.beginPath();
-    ctx.strokeStyle = color;
-    ctx.lineWidth = lineWidth;
-    ctx.lineCap = "round";
+function DrawGlowingLine(drawingCtx, startPoint, endPoint, lineWidth, color, glowing, glowIntensity) {
+    drawingCtx.beginPath();
+    drawingCtx.strokeStyle = color;
+    drawingCtx.lineWidth = lineWidth;
+    drawingCtx.lineCap = "round";
 
     if (glowing) {
-        ctx.shadowBlur = glowIntensity;
-        ctx.shadowColor = color;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
+        drawingCtx.shadowBlur = glowIntensity;
+        drawingCtx.shadowColor = color;
+        drawingCtx.shadowOffsetX = 0;
+        drawingCtx.shadowOffsetY = 0;
     }
-    ctx.moveTo(startX, startY);
-    ctx.lineTo(endX, endY);
-    ctx.stroke();
+    drawingCtx.moveTo(startPoint.x, startPoint.y);
+    drawingCtx.lineTo(endPoint.x, endPoint.y);
+    drawingCtx.stroke();
 
-    ctx.shadowBlur = 0;
+    drawingCtx.shadowBlur = 0;
 }
 
 function GetCSSColor(colorTag) {
-    const rootElement = document.documentElement;
-    const computedStyle = getComputedStyle(rootElement);
+    const ROOT_ELEMENT = document.documentElement;
+    const COMPUTER_STYLE = getComputedStyle(ROOT_ELEMENT);
     
-    const mainColor = computedStyle.getPropertyValue(colorTag).trim();
+    const MAIN_COLOR = COMPUTER_STYLE.getPropertyValue(colorTag).trim();
     
-    return mainColor;
+    return MAIN_COLOR;
 }
-
-function EaseOutCubic(x) { return 1 - Math.pow(1 - x, 3); }
-
-function EaseOutBack(x) {
-    const C1 = 1.70158;
-    const C3 = C1 + 1;
-    return 1 + C3 * Math.pow(x - 1, 3) + C1 * Math.pow(x - 1, 2);
-};
 
 class Point {
     constructor(x, y) {
-        this.xValue = x;
-        this.yValue = y;
+        this._x = x;
+        this._y = y;
     }
 
-    get x() { return this.xValue; }
-    get y() { return this.yValue; } 
-    set x(newX) { this.xValue = newX; }
-    set y(nexY) { this.yValue = nexY; } 
+    get x() { return this._x; }
+    get y() { return this._y; } 
+    set x(newX) { this._x = newX; }
+    set y(newY) { this._y = newY; } 
 
-    get clone() { return new Point(this.xValue, this.yValue); }
+    get clone() { return new Point(this._x, this._y); }
 }
 
 class Size {
     constructor(x, y) {
-        this.xValue = x;
-        this.yValue = y;
+        this._x = x;
+        this._y = y;
     }
 
-    get x() { return this.xValue; }
-    get y() { return this.yValue; } 
-    set x(newX) { this.xValue = newX; }
-    set y(nexY) { this.yValue = nexY; } 
+    get x() { return this._x; }
+    get y() { return this._y; } 
+    set x(newX) { this._x = newX; }
+    set y(newY) { this._y = newY; } 
 
-    get clone() { return new Point(this.xValue, this.yValue); }
+    get clone() { return new Point(this._x, this._y); }
 }
 
-class BitBox {
-    constructor(ctx, point, size, radius, color, text, glowing = false, glowingIntensity = 5) {
+class TextDisplay {
+    constructor(ctx, point, size, textToDraw, textDrawingFunction, objectDrawingFunction) {
         this._ctx = ctx;
 
-        this._position = point;
+        this._point = point;
 
         this._size = size;
         this._nextSize = size;
-        this._radius = radius;
 
-        this._color = color;
-        this._glowing = glowing;
-        this._glowingIntensity = glowingIntensity;
-
-        this._text = text;
-        this._nextText = text;
+        this._text = textToDraw;
+        this._nextText = textToDraw;
         this._fontSize = this.#FontSize();
+
+        this._textDrawing = textDrawingFunction;
+        this._objectDrawing = objectDrawingFunction;
 
         this._isAppearing = false;
         this._isChangingText = false;
@@ -148,42 +156,42 @@ class BitBox {
         this._deleted = false;
     }
 
-    changeText(nextText, timeMs = 500) {
-        this._nextText = nextText;
+    changeText(newText, durationMs = 500) {
+        this._nextText = newText;
         this._isChangingText = true;
         this._isChangingSize = false;
         this._isAppearing = false;
         this._isDeleting = false;
         this._shouldChangeText = true;
-        this._animationDuration = timeMs;
+        this._animationDuration = durationMs;
         this._startTime = performance.now();
     }
 
-    changeSize(newSize, timeMs = 500) {
+    changeSize(newSize, durationMs = 500) {
         this._nextSize = newSize;
         this._isChangingSize = true;
         this._isChangingText = false;
         this._isAppearing = false;
         this._isDeleting = false;
-        this._animationDuration = timeMs;
+        this._animationDuration = durationMs;
         this._startTime = performance.now();
     }
 
-    startAppear(timeMs = 500) {
+    startAppear(durationMs = 500) {
         this._isAppearing = true;
         this._isChangingSize = false;
         this._isChangingText = false;
         this._isDeleting = false;
-        this._animationDuration = timeMs;
+        this._animationDuration = durationMs;
         this._startTime = performance.now();
     }
 
-    startDelete(timeMs = 500) {
+    startDelete(durationMs = 500) {
         this._isDeleting = true;
         this._isChangingSize = false;
         this._isChangingText = false;
         this._isAppearing = false;
-        this._animationDuration = timeMs;
+        this._animationDuration = durationMs;
         this._startTime = performance.now();
         this._text = this._nextText;
     }
@@ -269,18 +277,17 @@ class BitBox {
     draw() {
         this._ctx.save();
 
-        this._ctx.translate(this._position.x + this._size.x/2, this._position.y + this._size.y/2);
+        this._ctx.translate(this._point.x + this._size.x/2, this._point.y + this._size.y/2);
         this._ctx.scale(1, this._currentScale);
 
         let posToDraw = new Point(-this._size.x/2, -this._size.y/2);
 
-        RoundedRect(this._ctx, posToDraw, this._size.x, this._size.y, this._radius, this._color, !this._glowing, this._glowing, this._glowingIntensity);
+        this._objectDrawing(this._ctx, posToDraw, this._size);
 
         this._ctx.textAlign = "center";
         this._ctx.textBaseline = "middle";
-        this._ctx.fillStyle = "#000000";
 
-        DrawText(this._ctx, this._text, new Point(0, 0), this._fontSize);
+        this._textDrawing(this._ctx, new Point(0, 0), this._text, this._fontSize);
 
         this._ctx.restore();
     }
@@ -294,10 +301,9 @@ class BitBox {
     get size() { return this._size; }
     get nextSize() { return this._nextSize; }
 
-    get position() { return this._position; }
-    get getCTX() { return this._ctx; }
+    get position() { return this._point; }
 
-    set position(point) { this._position = point; }
+    set position(newPoint) { this._point = newPoint; }
 }
 
-export { Point, Size, BitBox, ClearCanvasWithTransforms, CanvasResize, GlowingLine, GetCSSColor, ScrollToRight, EaseOutBack, EaseOutCubic }
+export { Point, Size, TextDisplay, ClearCanva, ResizeCanva, DrawGlowingLine, DrawText, DrawRoundedRect, GetCSSColor, ScrollToRight, Effect_Glowing, Effect_Stroke }
