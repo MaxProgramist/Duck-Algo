@@ -1,0 +1,9 @@
+{
+    "pages": [
+        {
+            "name": "BinaryNumbers",
+            "text": "Двійкові числа",
+            "path": "./pages/BinaryNumbers.html"
+        }
+    ]
+}

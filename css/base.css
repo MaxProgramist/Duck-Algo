@@ -1,0 +1,94 @@
+:root {
+    color-scheme: light dark;
+    --fontSize_H1: 32px;
+    --fontSize_H2: 28px;
+    --fontSize_H3: 24px;
+    --fontSize_baseText: 18px;
+
+    --color-background-main: light-dark(#efefef, #101010);
+    --color-background-lines: light-dark(#fefefe, #010101);
+
+    --color-text: light-dark(#111111, #eeeeee);
+
+    --canvasColor: #00000095;
+}
+
+@font-face {
+    font-family: font;
+    src: url(./../fonts/JetBrainsMonoNerdFont-Medium.ttf);
+}
+
+html,
+body {
+    width: 100%;
+    margin: 0;
+
+    font-family: font;
+    font-size: var(--fontSize_baseText);
+    color: var(--color-text);
+
+    background-color: var(--color-background);
+
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    column-gap: 5px;
+    min-height: 100vh;
+}
+
+nav,
+main {
+    padding: 10px;
+}
+
+h1 {
+    font-size: var(--fontSize_H1);
+}
+
+h2 {
+    font-size: var(--fontSize_H2);
+}
+
+h3 {
+    font-size: var(--fontSize_H3);
+}
+
+#contents {
+    float: right;
+
+    padding: 25px;
+    right: 0;
+    max-width: 30vw;
+}
+
+#canvasObject {
+    overflow-x: auto;
+}
+
+#backToTop {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+
+    z-index: 1000;
+
+    transform: translateX(100px);
+    opacity: 0;
+
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#backToTop.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
