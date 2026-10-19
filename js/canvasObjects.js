@@ -1,5 +1,5 @@
 const FPS = 60;
-const CANVA_COLOR = window.getComputedStyle(document.documentElement).getPropertyValue('--canvasColor').trim();
+const CANVA_COLOR = window.getComputedStyle(document.documentElement).getPropertyValue('--color-canvas').trim();
 
 function HEXtoLCH(color) {
     let filteredColor = parseInt(color.replace('#', ''), 16);

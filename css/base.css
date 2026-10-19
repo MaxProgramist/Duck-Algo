@@ -1,21 +1,30 @@
 :root {
     color-scheme: light dark;
-    --fontSize_H1: 32px;
-    --fontSize_H2: 28px;
-    --fontSize_H3: 24px;
-    --fontSize_baseText: 18px;
-
-    --color-background-main: light-dark(#efefef, #101010);
-    --color-background-lines: light-dark(#fefefe, #010101);
-
     --color-text: light-dark(#111111, #eeeeee);
+    --color-a: light-dark(#000000, #00abdb);
+    --fontSize_H1: 32px;
+    --fontSize_H2: 24px;
+    --fontSize_H3: 20px;
+    --fontSize_baseText: 16px;
 
-    --canvasColor: #00000095;
+    --color-background-main: light-dark(#efefef, #202020);
+    --color-background-content: light-dark(#efefefb0, #202020b0);
+    --color-background-lines: light-dark(#efefff, #141414);
+    --background-size: 60px;
+
+    --table-border: 1px;
+
+    --color-canvas: #00000095;
 }
 
 @font-face {
     font-family: font;
-    src: url(./../fonts/JetBrainsMonoNerdFont-Medium.ttf);
+    src: url(./../fonts/JetBrainsMonoNerdFontMono-Regular.ttf);
+}
+
+@font-face {
+    font-family: fontBold;
+    src: url(./../fonts/JetBrainsMonoNerdFontMono-ExtraBold.ttf);
 }
 
 html,
@@ -28,9 +37,15 @@ body {
     color: var(--color-text);
 
     background-color: var(--color-background);
+    background-image:
+        linear-gradient(to right, var(--color-background-lines) 2px, transparent 2px),
+        linear-gradient(to bottom, var(--color-background-lines) 2px, transparent 2px);
+    background-size: var(--background-size) var(--background-size);
 
     scroll-behavior: smooth;
     overflow-x: hidden;
+
+    animation: movingBackground 170s linear infinite;
 }
 
 body {
@@ -49,20 +64,53 @@ main {
     padding: 10px;
 }
 
+table,
+td,
+th {
+    background-color: var(--color-background-content);
+
+    border-collapse: collapse;
+    border: var(--table-border) solid var(--color-text);
+
+    text-align: center;
+}
+
 h1 {
+    font-family: fontBold;
     font-size: var(--fontSize_H1);
+    font-weight: thin;
 }
 
 h2 {
+    font-family: fontBold;
     font-size: var(--fontSize_H2);
+    font-weight: thin;
 }
 
 h3 {
+    font-family: fontBold;
     font-size: var(--fontSize_H3);
+    font-weight: thin;
+}
+
+b {
+    font-family: fontBold;
+    font-weight: normal;
+}
+
+a {
+    font-weight: 900;
+    color: var(--color-a);
+    text-decoration: none;
 }
 
 #contents {
     float: right;
+
+    background-color: var(--color-background-content);
+    border-color: var(--color-background-lines);
+    border-width: 4px;
+    border-radius: 25px;
 
     padding: 25px;
     right: 0;
@@ -91,4 +139,14 @@ h3 {
 #backToTop.is-visible {
     opacity: 1;
     transform: translateX(0);
+}
+
+@keyframes movingBackground {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 100% 100%;
+    }
 }
